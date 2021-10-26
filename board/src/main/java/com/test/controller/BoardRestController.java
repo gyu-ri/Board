@@ -30,16 +30,16 @@ public class BoardRestController {
 	BoardService boardService;
 	
 	//비밀번호 체크
-//	@RequestMapping(value="pwdCheck", method=RequestMethod.POST)
-//	public int pwdCheck(@RequestBody Board board,Model model, @RequestParam("no") int no) throws Exception{
-//		System.out.println("board rest controller 시작");
-//		Board board01 = boardService.getContent(no);
-//		if(board.getPassword()==(board01.getPassword())){
-//			return 0;
-//		}else {
-//			return 1;
-//		}
-//		
-//	}
+	@RequestMapping(value="pwdCheck", method=RequestMethod.POST)
+	public int pwdCheck(@RequestBody Board board,Model model, @RequestParam("no") int no) throws Exception{
+		System.out.println("board rest controller 시작");
+		Board board01 = boardService.getContent(no);
+		if(board.getPassword()==(board01.getPassword())){
+			return 0;
+		}else {
+			return 1;
+		}
+		
+	}
 
 }
