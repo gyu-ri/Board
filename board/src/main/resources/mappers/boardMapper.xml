@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="boardMapper">
+
+  <resultMap type="com.test.domain.Board" id="board">
+	<result property="no" column="no" jdbcType="INTEGER" />
+	<result property="title" column="title" jdbcType="VARCHAR" />
+	<result property="writer" column="writer" jdbcType="VARCHAR" />
+	<result property="password" column="password" jdbcType="VARCHAR" />
+	<result property="content" column="content" jdbcType="VARCHAR" />
+	<result property="writeDate" column="write_date" jdbcType="DATE" />
+</resultMap>
+ 
+ <!-- 게시판 글 목록 -->
+	 <select id="contentList" parameterType="com.test.domain.Board" resultMap="board">
+		SELECT no, title, writer, write_date
+		FROM board
+	 	ORDER BY no DESC
+	 </select>
+	 
+	 <!-- 게시판 글 작성 -->
+	 <insert id="addContent" parameterType="com.test.domain.Board" >
+	 	INSERT
+		INTO BOARD(NO, TITLE, WRITER, PASSWORD, CONTENT, write_date)
+		VALUES (NO_SEQ.NEXTVAL, #{title}, #{writer}, #{password}, #{content}, SYSDATE)
+	 </insert>
+	 
+	 <!-- 게시판 글 상세보기 -->
+	 <select id="getContent" parameterType="com.test.domain.Board" resultMap="board">
+		SELECT no, title, writer, write_date, content, password
+		FROM board
+		WHERE no=#{no}
+	 </select>
+	 
+
+	 <!-- 글 수정 -->
+	 <update id="updateContent" parameterType="com.test.domain.Board" >
+	    UPDATE board
+ 		SET content=#{content}, title=#{title}, writer=#{writer}
+		WHERE no=#{no}
+	 </update>
+	 
+	 <!-- 글 삭제 -->
+	 <delete id="deleteContent">
+	 	DELETE FROM board
+	 	WHERE no=#{no}
+	 </delete>
+	 
+	 <!-- 글 목록 페이징 -->
+	 <select id="listPage" parameterType="com.test.domain.Criteria" resultMap="board">
+	 	SELECT no, title, writer, write_date 
+		FROM (SELECT ROWNUM AS no, title, writer, write_date FROM board)
+		WHERE no BETWEEN #{rowStart} AND #{rowEnd}
+		ORDER BY no DESC
+	 </select>
+	 
+	 <!-- 게시물 총 갯수 -->
+	 <select id="listCount" resultType="int">
+	 	SELECT COUNT(no)
+		FROM board
+	 </select>
+	 
+	 <!-- 검색 -->
+	 <select id="listSerach" resultType="com.test.domain.Board" parameterType="com.test.domain.SearchCriteria">
+		SELECT no, title, writer,write_date
+		FROM (SELECT no, title, writer,write_date,row_number() over(ORDER BY no DESC) rNum
+		FROM board
+		<include refid="search"></include>) b
+		WHERE rNum BETWEEN #{rowStart} AND #{rowEnd}
+		ORDER BY no DESC
+	 </select>
+	 
+	 <sql id="search">
+	 	<if test="searchType != null">
+	 		<if test="searchType == 'w'.toString()">WHERE writer LIKE '%' || #{keyword} || '%'</if>
+	 		<if test="searchType == 't'.toString()">WHERE title  LIKE '%' || #{keyword} || '%'</if>
+	 	</if>
+	 </sql>
+	 
+	 	 <!-- 검색 게시물 총 갯수 -->
+	 <select id="searchCount" resultType="int">
+	 	SELECT COUNT(no)
+		FROM board
+		<include refid="search"></include>
+	 </select>
+	 
+	 
+	 <!-- 비밀번호 체크 -->
+	 <select id="pwdCheck" parameterType="com.test.domain.Board" resultMap="board">
+	 	SELECT no, password
+	 	FORM board
+	 	WHERE no=#{no} AND password=#{password}
+	 </select>
+</mapper>
