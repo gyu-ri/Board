@@ -73,7 +73,7 @@ public class BoardDaoImpl implements BoardDao {
 	//목록 + 페이징 + 검색
 	@Override
 	public List<Board> listSearch(SearchCriteria searchCriteria) throws Exception {
-		System.out.println("ddddd"+searchCriteria);
+		System.out.println("daoimpl"+searchCriteria);
 		return sqlsession.selectList("boardMapper.listSerach", searchCriteria);
 	}
 

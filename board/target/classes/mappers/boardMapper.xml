@@ -64,8 +64,8 @@
 	 
 	 <!-- 검색 -->
 	 <select id="listSerach" resultType="com.test.domain.Board" parameterType="com.test.domain.SearchCriteria">
-		SELECT no, title, writer,write_date
-		FROM (SELECT no, title, writer,write_date,row_number() over(ORDER BY no DESC) rNum
+		SELECT no, title, write_date, writer
+		FROM (SELECT no, title, write_date, writer,row_number() over(ORDER BY no DESC) rNum
 		FROM board
 		<include refid="search"></include>) b
 		WHERE rNum BETWEEN #{rowStart} AND #{rowEnd}

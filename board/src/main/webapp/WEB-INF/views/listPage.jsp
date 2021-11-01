@@ -103,7 +103,8 @@ text-align : center;
       <td id="title" onclick="location='getContent?no=${contentList.no}'" style="cursor:pointer;"><c:out value="${contentList.title}"/></td>
       <td id="writer"><c:out value="${contentList.writer}"></c:out></td>
   <!--     <td id="writeDate"><fmt:formatDate value="${contentList.writeDate}" pattern="yyyy-MM-dd"/></td> -->
-      <td id="writeDate"><c:out value="${contentList.writeDate}"/></td>
+      <!-- <td id="writeDate"><c:out value="${contentList.writeDate}"/></td> -->
+      <td><fmt:formatDate value="${contentList.writeDate}" pattern="yyyy-MM-dd"/></td>
     </tr>
     </c:forEach>
   </tbody>
