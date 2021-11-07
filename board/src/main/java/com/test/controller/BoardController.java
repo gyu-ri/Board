@@ -19,14 +19,22 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.test.domain.Board;
 import com.test.domain.Criteria;
 import com.test.domain.PageMaker;
+import com.test.domain.Reply;
 import com.test.domain.SearchCriteria;
 import com.test.service.BoardService;
+import com.test.service.ReplyService;
+//@restController -> spring 4.0 이상부터 사용 가능하다 (spring boot) spring 3.0에서 비동기 통신인 ajax를 사용하려면 @RequestBody,@ResponseBody를 사용하여야한다
+//@RequestBody : HTTP 요청의 body 내용을 자바 객체로 매핑해준다, HTTP 요청 몸체를 자바 객체로 전달 받는다
+//@ResponseBody : 자바 객체를 HTTP 요청의 body 내용으로 매핑한다, 자바 객체를 HTTP 응답 몸체로 전송한다
 
 @Controller
 public class BoardController {
 	
 	@Autowired
 	BoardService boardService;
+	
+	@Autowired
+	ReplyService replyService;
 	
 	//글목록
 	@RequestMapping(value="/contentList", method=RequestMethod.GET)
@@ -103,6 +111,10 @@ public class BoardController {
 		model.addAttribute("board", board);
 		System.out.println("getContent Controller 확인"+board);
 		
+		List<Reply> replyList = replyService.getReply(no);
+		model.addAttribute("replyList", replyList);
+		System.out.println("getContent에서 replyList 확인 :: "+replyList);
+		
 		return "getContent";
 		
 	}
@@ -147,6 +159,26 @@ public class BoardController {
 		return "redirect:/listPage?page="+criteria.getPage();
 	}
 	
+	
+	@ResponseBody
+	@RequestMapping(value="/addReply", method=RequestMethod.POST)
+	public void addReply(@RequestBody Reply reply) throws Exception{
+		
+		System.out.println("addReply ajax 실행 되나요111111?");
+		replyService.addReply(reply);
+		System.out.println("addReply ajax 실행 되나요2222?");
+	}
+	
+	
+	
+	
+	
+	//=======================reply controller=============================
+//	@RequestMapping(value="/getReply", method=RequestMethod.GET)
+//	public String getReply(Board board, Model model) throws Exception{
+//		
+//		return "getContent";
+//	}
 
 	
 	

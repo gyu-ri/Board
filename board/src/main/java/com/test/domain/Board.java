@@ -12,6 +12,12 @@ public class Board {
 	private String content;
 	private Date writeDate;
 	
+	//답글 변수
+	private int groupNo;
+	private int groupOrder;
+	private int indent;
+	
+	
 	public int getNo() {
 		return no;
 	}
@@ -49,12 +55,33 @@ public class Board {
 		this.writeDate = writeDate;
 	}
 	
+	
+	
+	public int getGroupNo() {
+		return groupNo;
+	}
+	public void setGroupNo(int groupNo) {
+		this.groupNo = groupNo;
+	}
+	public int getGroupOrder() {
+		return groupOrder;
+	}
+	public void setGroupOrder(int groupOrder) {
+		this.groupOrder = groupOrder;
+	}
+	public int getIndent() {
+		return indent;
+	}
+	public void setIndent(int indent) {
+		this.indent = indent;
+	}
 	@Override
 	public String toString() {
 		return "Board [no=" + no + ", title=" + title + ", writer=" + writer + ", password=" + password + ", content="
-				+ content + ", writeDate=" + writeDate + "]";
+				+ content + ", writeDate=" + writeDate + ", groupNo=" + groupNo + ", groupOrder=" + groupOrder
+				+ ", indent=" + indent + "]";
 	}
-	
-	
 
+	
+	
 }

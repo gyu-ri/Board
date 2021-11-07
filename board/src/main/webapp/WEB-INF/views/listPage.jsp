@@ -1,7 +1,7 @@
 <!DOCTYPE html>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt"  prefix="fmt"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 
 <html>
@@ -105,6 +105,7 @@ text-align : center;
   <!--     <td id="writeDate"><fmt:formatDate value="${contentList.writeDate}" pattern="yyyy-MM-dd"/></td> -->
       <!-- <td id="writeDate"><c:out value="${contentList.writeDate}"/></td> -->
       <td><fmt:formatDate value="${contentList.writeDate}" pattern="yyyy-MM-dd"/></td>
+    <!-- 작성일 안불러와짐 수정할것 -->
     </tr>
     </c:forEach>
   </tbody>
