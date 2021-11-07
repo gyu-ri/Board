@@ -212,6 +212,7 @@ $(function(){
 <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
 <a href="/listPage?page=1" type="button" class="btn btn-primary" id="getList">목록으로</a>
 <a href="javascript:window.history.go(-1);" type="button" class="btn btn-primary" id="back">뒤로</a>
+   <input type="button" id="addContentReply" value="답글달기" class="btn btn-primary" >
 <!--<button id="back" class="btn btn-primary"><a href="javascript:window.history.go(-1);">뒤로</a></button>-->
 
 
@@ -236,9 +237,174 @@ $(function(){
 
 
 
+ <!-- 댓글 list 시작 -->
+ <div id="reply">
+ 	<ol class="replyList">
+ 		<c:forEach items="${replyList}" var="replyList">
+ 			<li>
+ 				<p>
+ 					작성자 : ${replyList.writer}<br/>
+ 					작성 날짜 : <fmt:formatDate value="${replyList.writeDate}" pattern="yyyy-MM-dd"/>
+ 				</p>
+ 				<c:out value="${replyList.text}"></c:out><br/><br/>
+ 			</li>
+ 		</c:forEach>
+ 	</ol>
+ </div>
+ 
+ <!-- 댓글 list 끝 -->
+ 
+ 
+ <!-- 댓글 작성 시작 -->
+<!--  <form method = "post" action="/reply/addReply" name= "replyList">
+ 	<p>
+ 		<label>작성자</label> <input type="text" name="replyWriter">
+ 	</p>
+ 	
+ 	<p>
+ 		<label>비밀번호</label> <input type="text" name="replyPassword">
+ 	</p>
+ 	
+ 	<p>
+ 		<textarea rows="5" cols="50" name="text"></textarea>
+ 	</p>
+ 	
+ 	<p>
+ 		 <input type="hidden" name="no" value="${reply.no}">
+ 		<button type = "submit">댓글 작성</button>
+ 	</p>
+ 
+ </form> -->
+ 
+ <form name="replyList" id="replyList">
+ 		 <input type="hidden" name="no" id="no" value="${board.no}">
+ 	<p>
+ 		<label>작성자</label> <input type="text" name="replyWriter" id="replyWriter">
+ 	</p>
+ 	
+ 	<p>
+ 		<label>비밀번호</label> <input type="text" name="replyPassword" id="replyPassword">
+ 	</p>
+ 	
+ 	<p>
+ 		<textarea rows="5" cols="50" name="text" id="text"></textarea>
+ 	</p>
+ 	
+ 	<p>
+ 		<button type="submit" id="addReply">댓글 작성</button>
+ 	</p>
+ 
+ </form>
+ <!-- 댓글 작성 끝 -->
  
 
+<script>
+/* $(function(){
+	$("#addReply").on("click",function(){
+		
+		const replyDate = $("#replyList").serialize();
+		
+		console.log(replyDate);
+		
+		$.ajax({
+			type : "POST",
+			url : "/addReply",
+			data : replyDate,
+			dataType : "json",
+			//data : JSON.stringify(replyDate),
+			//contentType : "application/json",
+			success : function(data){
+				alert("댓글 작성 완료!");
+				console.log(data);
+			},
+			error : function(){
+				alert("댓글 작성 실패!");
+			}
+		});
+		
+	})
+	
+}); */
 
+
+/* $(function(){
+	$("#addReply").on("click",function(){
+		
+		//const replyDate = $("#replyList").serialize();
+		const writer = $("#replyWriter").val();
+		const password = $("#replyPassword").val();
+		const text = $("#text").val();
+		
+		const param = {"writer":writer, "password":password, "text":text}
+		console.log(param);
+		//console.log(replyDate);
+		
+		$.ajax({
+			type : "POST",
+			url : "/addReply",
+			data : JSON.stringify(param),
+			dataType : "text",
+			//data : JSON.stringify(replyDate),
+			//contentType : "application/json",
+			success : function(data){
+				alert("댓글 작성 완료!");
+				console.log(data);
+			},
+			error : function(){
+				alert("댓글 작성 실패!");
+			}
+		});
+		
+	})
+	
+}); */
+
+
+
+
+
+
+ $(function(){
+	$("#addReply").on("click",function(){
+		
+		//const replyDate = $("#replyList").serialize();
+		//const writer = $("#replyWriter").val();
+		//const password = $("#replyPassword").val();
+		//const text = $("#text").val();
+		
+		//const param = {"writer":writer, "password":password, "text":text}
+		//console.log(param);
+		//console.log(replyDate);
+		
+		const text = {no : $("#no").val(),
+					  writer : $("#replyWriter").val(),
+				      password : $("#replyPassword").val(),
+				      text : $("#text").val()
+			 		  };
+		console.log(text);
+		$.ajax({
+			type : "POST",
+			url : "/addReply",
+			data : JSON.stringify(text),
+			contentType : "application/json",
+			async : true,
+			//dataType : "text",
+			//data : JSON.stringify(replyDate),
+			//contentType : "application/json",
+			success : function(data){
+				console.log(data);
+			},
+			error : function(){
+				alert("댓글 작성 실패!");
+			}
+		});
+		
+	})
+	
+}); 
+
+
+</script>
 
 </body>
 </html>

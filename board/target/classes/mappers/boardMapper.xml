@@ -11,6 +11,9 @@
 	<result property="password" column="password" jdbcType="VARCHAR" />
 	<result property="content" column="content" jdbcType="VARCHAR" />
 	<result property="writeDate" column="write_date" jdbcType="DATE" />
+	<result property="groupNo" column="group_no" jdbcType="INTEGER" />
+	<result property="groupOrder" column="group_order" jdbcType="INTEGER" />
+	<result property="indent" column="indent" jdbcType="INTEGER" />
 </resultMap>
  
  <!-- 게시판 글 목록 -->
@@ -20,16 +23,23 @@
 	 	ORDER BY no DESC
 	 </select>
 	 
-	 <!-- 게시판 글 작성 -->
-	 <insert id="addContent" parameterType="com.test.domain.Board" >
+	 <!-- 게시판 글 작성 답글 구현 전 -->
+<!-- 	 <insert id="addContent" parameterType="com.test.domain.Board" >
 	 	INSERT
 		INTO BOARD(NO, TITLE, WRITER, PASSWORD, CONTENT, write_date)
 		VALUES (NO_SEQ.NEXTVAL, #{title}, #{writer}, #{password}, #{content}, SYSDATE)
 	 </insert>
+ -->
+	 <!-- 게시판 글 작성 -->
+	 <insert id="addContent" parameterType="com.test.domain.Board" >
+	 	INSERT
+		INTO BOARD(NO, TITLE, WRITER, PASSWORD, CONTENT, write_date, group_no, group_order, indent)
+		VALUES (NO_SEQ.NEXTVAL, #{title}, #{writer}, #{password}, #{content}, SYSDATE, GNO_SEQ.NEXTVAL,0,0)
+	 </insert>
 	 
 	 <!-- 게시판 글 상세보기 -->
 	 <select id="getContent" parameterType="com.test.domain.Board" resultMap="board">
-		SELECT no, title, writer, write_date, content, password
+		SELECT no, title, writer, write_date, content, password, group_no, group_order, indent
 		FROM board
 		WHERE no=#{no}
 	 </select>
@@ -86,6 +96,16 @@
 		<include refid="search"></include>
 	 </select>
 	 
+	 <!-- 답글 작성 -->
+	 <insert id="addContentReply" parameterType="com.test.domain.Board" >
+		INSERT INTO
+		BOARD (no, title, writer, content, password, write_date, group_no, group_order, indent)
+		VALUES (NO_SEQ.NEXTVAL, #{title}, #{writer}, #{content}, #{password}, SYSDATE, #{groupNo}, 
+		(SELECT NVL(max(#{groupOrder}),1)+1 FROM board WHERE no = #{no}), 
+        (SELECT NVL(max(#{indent}),1)+1 FROM board WHERE no = #{no}))
+	 </insert>
+	 
+	 
 	 
 	 <!-- 비밀번호 체크 -->
 	 <select id="pwdCheck" parameterType="com.test.domain.Board" resultMap="board">
@@ -93,4 +113,6 @@
 	 	FORM board
 	 	WHERE no=#{no} AND password=#{password}
 	 </select>
+	 
+	 
 </mapper>
