@@ -347,6 +347,7 @@ function spaceCheck(txt){
 <form action="addContent" method="post" name="content01" onsubmit="return check()" >
   <fieldset>
     <legend>글작성</legend>
+<c:out value="${board.groupNo}"/>
     <div class="form-group">
       <label for="title" class="form-label mt-4">제목</label>
      <input type="text"  name="title" class="form-control" id="title" aria-describedby="title"  size="200" placeholder="제목을 입력하세요 (최대 100자)">
@@ -372,6 +373,8 @@ function spaceCheck(txt){
     <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
 <a href="/listPage?page=1" type="button" class="btn btn-primary" id="getList">목록으로</a>
   </fieldset>
+
+
 </form>
 
 

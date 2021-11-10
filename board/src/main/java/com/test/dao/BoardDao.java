@@ -1,6 +1,7 @@
 package com.test.dao;
 
 import java.util.List;
+import java.util.Map;
 
 import com.test.domain.Board;
 import com.test.domain.Criteria;
@@ -12,6 +13,15 @@ public interface BoardDao {
 	//글작성
 	public void addContent(Board board) throws Exception;
 	
+	//답글 작성
+	public void addContentReply(Board board) throws Exception;
+	
+	//답글 작성시 groupOrder 증가
+	public void updateGroupOrder(Board board) throws Exception;
+	
+	//답글 그룹의 갯수
+	public int groupNoCount(int groupNo) throws Exception;
+
 	//글목록
 	public List<Board> contentList() throws Exception;
 	
@@ -27,7 +37,10 @@ public interface BoardDao {
 	//글수정
 	public void updateContent(Board board) throws Exception;
 	
-	//삭제
+	//삭제 답글 구현 전  
+	//public void deleteContent(int no) throws Exception;
+	
+	//삭제 답글 구현 후
 	public void deleteContent(int no) throws Exception;
 	
 	//목록 + 페이징 + 검색

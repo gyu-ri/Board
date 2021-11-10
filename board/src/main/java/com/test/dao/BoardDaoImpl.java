@@ -30,6 +30,26 @@ public class BoardDaoImpl implements BoardDao {
 		sqlsession.insert("boardMapper.addContent", board);
 	}
 	
+	//답글 작성
+	@Override
+	public void addContentReply(Board board) throws Exception {
+		sqlsession.update("boardMapper.updateGroupOrder", board);
+		sqlsession.insert("boardMapper.addContentReply", board);
+	}
+	
+	//답글 작성시 groupOrder 증가
+	@Override
+	public void updateGroupOrder(Board board) throws Exception {
+		sqlsession.update("boardMapper.updateGroupOrder",board);
+		
+	}
+	
+	//답글 그룹의 갯수
+	@Override
+	public int groupNoCount(int groupNo) throws Exception {
+	return	sqlsession.selectOne("boardMapper.groupNoCount",groupNo);
+	}
+	
 	//목록보기
 	@Override
 	public List<Board> contentList() throws Exception{
@@ -51,7 +71,7 @@ public class BoardDaoImpl implements BoardDao {
 		
 	}
 	
-	// 글삭제
+	// 글삭제 답글 구현 전 후 같음
 	@Override
 	public void deleteContent(int no) throws Exception {
 		sqlsession.delete("boardMapper.deleteContent", no);
@@ -88,6 +108,11 @@ public class BoardDaoImpl implements BoardDao {
 	public Board pwdCheck(Board board) throws Exception {
 		return sqlsession.selectOne("boardMapper.pwdCheck", board);
 	}
+
+
+
+
+
 	
 	
 

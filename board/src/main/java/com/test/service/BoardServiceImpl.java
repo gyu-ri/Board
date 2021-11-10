@@ -21,11 +21,29 @@ public class BoardServiceImpl implements BoardService{
 	@Inject
 	private BoardDao boardDao;
 	
+	//글 작성
 	@Override
 	public void addContent(Board board) throws Exception{
 		boardDao.addContent(board);
 	}
 	
+	//답글 작성
+	@Override
+	public void addContentReply(Board board) throws Exception {
+		boardDao.addContentReply(board);
+	}
+	
+	//답글 작성시 groupOrder 증가
+	@Override
+	public void updateGroupOrder(Board board) throws Exception {
+		boardDao.updateGroupOrder(board);
+	}
+	
+	//답글 그룹의 갯수
+	@Override
+	public int groupNoCount(int groupNo) throws Exception {
+		return boardDao.groupNoCount(groupNo);
+	}
 	
 	@Override
 	public List<Board> contentList() throws Exception{
@@ -85,6 +103,13 @@ public class BoardServiceImpl implements BoardService{
 	public Board pwdCheck(Board board) throws Exception {
 		return boardDao.pwdCheck(board);
 	}
+
+
+
+
+
+
+
 	
 
 }

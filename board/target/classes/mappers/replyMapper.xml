@@ -20,6 +20,7 @@
 		SELECT NO,RNO, TEXT, WRITER, WRITE_DATE, PASSWORD
 		FROM REPLY
 		WHERE NO = #{no}
+		ORDER BY write_date DESC
 	</select>
 
 

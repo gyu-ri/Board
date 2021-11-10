@@ -344,12 +344,12 @@ function spaceCheck(txt){
 <body>
 
 
-<form action="addContent" method="post" name="content01" onsubmit="return check()" >
+<form action="addContentReply" method="post" name="content01" onsubmit="return check()" >
   <fieldset>
-    <legend>글작성</legend>
+    <legend>답글 작성</legend>
     <div class="form-group">
       <label for="title" class="form-label mt-4">제목</label>
-     <input type="text"  name="title" class="form-control" id="title" aria-describedby="title"  size="200" placeholder="제목을 입력하세요 (최대 100자)">
+     <input type="text"  name="title" class="form-control" id="title" aria-describedby="title"  size="200" value="${board.title}">
     </div>
      <div class="form-group">
       <label for="writer" class="form-label mt-4">작성자</label>
@@ -368,6 +368,9 @@ function spaceCheck(txt){
       <!--<input type="text" id="textLength" readonly style="border:none;">-->
       <textarea class="form-control" name="content" id="content" rows="3" style="margin-top: 0px; margin-bottom: 0px; height: 500px; width: 1200px;"  placeholder="내용을 입력하세요 (최대 500자)"></textarea>
     </div>
+    <input type="hidden" name="groupNo" id="groupNo" value="${board.groupNo}">
+    <input type="text" name="groupOrder" id="groupOrder" value="${board.groupOrder}">
+	<input type="text" name="indent" id="indent" value="${board.indent}"> 
     <button type="submit" class="btn btn-primary" id="add">작성</button>
     <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
 <a href="/listPage?page=1" type="button" class="btn btn-primary" id="getList">목록으로</a>

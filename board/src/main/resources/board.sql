@@ -15,7 +15,7 @@ CREATE TABLE BOARD(
 NO NUMBER NOT NULL PRIMARY KEY,
 TITLE VARCHAR2(300) NOT NULL,
 WRITER VARCHAR2(15) NOT NULL,
-PASSWORD VARCHAR2() NOT NULL,
+PASSWORD VARCHAR2(16) NOT NULL,
 CONTENT VARCHAR2 (1500) NOT NULL,
 WRITE_DATE DATE,
 GROUP_NO NUMBER NOT NULL,
@@ -89,6 +89,8 @@ ALTER TABLE board ADD GROUP_ORDER NUMBER;
 
 ALTER TABLE board ADD INDENT NUMBER;
 
+ALTER TABLE board ADD DELETE_STATUS NUMBER DEFAULT 0;
+
 <<<<<<<<<<컬럼 추가>>>>>>>>>>
 
 
@@ -148,6 +150,21 @@ BOARD (no, title, writer, content, password, write_date, group_no, group_order, 
 VALUES (NO_SEQ.NEXTVAL, '답글 테스트중22', '답글작성자', '답글 내용이다', '123', SYSDATE, 5, 
 		(SELECT NVL(max(group_order),1)+1 FROM board WHERE no = 669), 
         (SELECT NVL(max(indent),1)+1 FROM board WHERE no = 669));
+        
+
+INSERT INTO
+BOARD (no, title, writer, content, password, write_date, group_no, group_order, indent)
+VALUES (NO_SEQ.NEXTVAL, '답글 테스트중@@@', '답글작성자', '답글 내용이다', '123', SYSDATE, 9, 
+		(SELECT gorup_order FROM board (SELECT NVL(max(group_order),1)+1 FROM board group_no = 9 AND group_order = 1)), 
+        (SELECT NVL(max(indent),1)+1 FROM board group_no = 9 AND indent = 1));
+
+        
+        
+        INSERT INTO
+		BOARD (no, title, writer, content, password, write_date, group_no, group_order, indent)
+		VALUES (NO_SEQ.NEXTVAL, #{title}, #{writer}, #{content}, #{password}, SYSDATE, #{groupNo}, 
+		(SELECT NVL(max(#{groupOrder}),1)+1 FROM board WHERE no = #{no}), 
+        (SELECT NVL(max(#{indent}),1)+1 FROM board WHERE no = #{no}))
 
 <<<<<<<<<<답글 추가>>>>>>>>>>
 

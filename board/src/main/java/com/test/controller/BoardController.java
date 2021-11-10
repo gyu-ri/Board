@@ -1,6 +1,7 @@
 package com.test.controller;
 
 import java.util.List;
+import java.util.logging.Logger;
 
 import javax.inject.Inject;
 
@@ -72,14 +73,16 @@ public class BoardController {
 	
 	//글목록 + 페이징 + 검색
 	@RequestMapping(value="/listPage", method=RequestMethod.GET)
-	public void listPage(@ModelAttribute("searchCriteria") SearchCriteria searchCriteria ,Model model, Criteria criteria, int page) throws Exception{
+	public void listSearch(@ModelAttribute("searchCriteria") SearchCriteria searchCriteria ,Model model, Criteria criteria, int page) throws Exception{
 		List<Board> contentList=boardService.listSearch(searchCriteria);
 		model.addAttribute("contentList", contentList);
 		List<Board> list =boardService.contentList();
 		model.addAttribute("list", list);
 		criteria.setPage(page);
 		model.addAttribute("criteria", criteria);
-		System.out.println("listPage"+contentList);
+		
+		
+		System.out.println("@@@@@@@@"+contentList);
 		PageMaker pageMaker = new PageMaker();
 		pageMaker.setCriteria(searchCriteria);
 		//pageMaker.setTotalCount(boardService.listCount());
@@ -100,8 +103,37 @@ public class BoardController {
 		System.out.println("boardController addContent post 시작");
 		boardService.addContent(board);
 		return "redirect:/listPage?page="+criteria.getPage();
-		
 	}
+
+	//답글 작성
+	@RequestMapping(value="/addContentReply", method=RequestMethod.GET)
+	public void addContentReply(int no, Model model) throws Exception{
+		Board board=boardService.getContent(no);
+		model.addAttribute("board", board);
+		System.out.println("addContentReply GET 에서 확인 :::::"+board);
+		// return "redirect:/listPage";
+	}
+	
+	//답글 작성
+	@RequestMapping(value="/addContentReply", method=RequestMethod.POST)
+	public String addContentReply(Board board, Criteria criteria ,Model model,int groupNo) throws Exception{
+		System.out.println("addContentReply post 시작~~~");
+		boardService.addContentReply(board);
+		
+		//Board board02 = new Board();
+	//	board.setGroupNoCount(boardService.groupNoCount(groupNo));
+		//System.out.println("@@@@@@@@@@@@@@@@@@@@"+board.getGroupNoCount());
+		//boardService.updateGroupOrder(board);
+		//System.out.println("addContentReply post 시작~~~4444"+groupOrder);
+		
+//		if(board.getGroupNoCount() > 1) {
+//			boardService.updateGroupOrder(board);
+//			System.out.println("@@@@@@@@@@@@@@@@@@@@"+board.getGroupNo());
+//		}
+		return "redirect:/listPage?page="+criteria.getPage();
+	}
+	
+	
 	
 	
 	//상세보기
@@ -111,9 +143,9 @@ public class BoardController {
 		model.addAttribute("board", board);
 		System.out.println("getContent Controller 확인"+board);
 		
-		List<Reply> replyList = replyService.getReply(no);
-		model.addAttribute("replyList", replyList);
-		System.out.println("getContent에서 replyList 확인 :: "+replyList);
+//		List<Reply> replyList = replyService.getReply(no);
+//		model.addAttribute("replyList", replyList);
+//		System.out.println("getContent에서 replyList 확인 :: "+replyList);
 		
 		return "getContent";
 		
@@ -160,6 +192,7 @@ public class BoardController {
 	}
 	
 	
+	//댓글 작성
 	@ResponseBody
 	@RequestMapping(value="/addReply", method=RequestMethod.POST)
 	public void addReply(@RequestBody Reply reply) throws Exception{
@@ -169,6 +202,20 @@ public class BoardController {
 		System.out.println("addReply ajax 실행 되나요2222?");
 	}
 	
+	
+	//댓글 가져오기
+	@ResponseBody
+	@RequestMapping(value="/getReply", method=RequestMethod.GET)
+	public List<Reply> getReply(@RequestParam("no") int no, Model model) throws Exception{
+		
+		System.out.println("getReply ajax 실행 되나요111111?");
+		List<Reply> replyList = replyService.getReply(no);
+		System.out.println("getReply ajax 실행 되나요2222?");
+		
+		model.addAttribute("replyList", replyList);
+		
+		return replyList;
+	}
 	
 	
 	

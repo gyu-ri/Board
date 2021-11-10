@@ -92,15 +92,35 @@ text-align : center;
     </tr>
   </thead>
   <tbody>
- 
-  <c:forEach items= "${contentList}" var="contentList" varStatus="status" >
+
+    <c:forEach items= "${contentList}" var="contentList" varStatus="status" >
     <tr>
-    
     <c:set var="page" value="${criteria.page}"/>
     <c:set var="num05" value="${pageMaker.totalCount}"/>
       <td id="no">${num05-((page-1)*10)-status.index}</td>
       <!--  <td onclick="location='getContent?no=${contentList.no}'" style="cursor:pointer;">${contentList.title}</td>--> 
-      <td id="title" onclick="location='getContent?no=${contentList.no}'" style="cursor:pointer;"><c:out value="${contentList.title}"/></td>
+      
+ <%--     <c:forEach var="indent" begin="1" end="${baord.indent}">
+       	ddd&nbsp; <!-- indent =1 이면 띄어쓰기 한칸 하겠다 -->
+      </c:forEach>
+      <c:if test="${board.indent>0}">
+      <c:out value="Re:"/>
+      </c:if> --%>
+      <td>
+      <c:if test = "${contentList.indent == 0}">
+     	 <div id="title" onclick="location='getContent?no=${contentList.no}'" style="cursor:pointer;">
+      	 <c:out value="${contentList.title}"/>
+         </div>
+      </c:if>
+      
+      <c:if test = "${contentList.indent > 0}">
+      		<div id="title" onclick="location='getContent?no=${contentList.no}'" style="cursor:pointer; padding-left:${contentList.indent * 20}px;">
+      			<c:out value="re: ${contentList.title}"/>
+      		</div>
+      </c:if>
+      
+      
+      </td>
       <td id="writer"><c:out value="${contentList.writer}"></c:out></td>
   <!--     <td id="writeDate"><fmt:formatDate value="${contentList.writeDate}" pattern="yyyy-MM-dd"/></td> -->
       <!-- <td id="writeDate"><c:out value="${contentList.writeDate}"/></td> -->
@@ -108,6 +128,34 @@ text-align : center;
     <!-- 작성일 안불러와짐 수정할것 -->
     </tr>
     </c:forEach>
+    
+ <%--  <c:forEach items= "${contentList}" var="contentList" varStatus="status" >
+    <tr>
+    <c:out value="${contentList.indent}"/>
+    <c:set var="page" value="${criteria.page}"/>
+    <c:set var="num05" value="${pageMaker.totalCount}"/>
+      <td id="no">${num05-((page-1)*10)-status.index}</td>
+      <td>
+      <c:choose>
+      	<c:when test="${contentList.indent > 0}">
+      		<c:forEach begin = "0" end="${contentList.indent}">
+      			<span style='padding-left : 20px'> </span>
+      		</c:forEach>
+      		<span style='font-size : 12px;'>Re:</span>
+		      <div id="title" onclick="location='getContent?no=${contentList.no}'" style="cursor:pointer;"><c:out value="${contentList.title}" /></div>
+      	</c:when>
+      <c:otherwise>
+		  <div id="title" onclick="location='getContent?no=${contentList.no}'" style="cursor:pointer;"><c:out value="${contentList.title}" /></div>
+      </c:otherwise>
+      </c:choose>
+      </td>
+      <td id="writer"><c:out value="${contentList.writer}"></c:out></td>
+  <!--     <td id="writeDate"><fmt:formatDate value="${contentList.writeDate}" pattern="yyyy-MM-dd"/></td> -->
+      <!-- <td id="writeDate"><c:out value="${contentList.writeDate}"/></td> -->
+      <td><fmt:formatDate value="${contentList.writeDate}" pattern="yyyy-MM-dd"/></td>
+    <!-- 작성일 안불러와짐 수정할것 -->
+    </tr>
+    </c:forEach> --%>
   </tbody>
 </table>
 

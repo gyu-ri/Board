@@ -16,6 +16,7 @@ public class Board {
 	private int groupNo;
 	private int groupOrder;
 	private int indent;
+	private int groupNoCount;
 	
 	
 	public int getNo() {
@@ -57,6 +58,14 @@ public class Board {
 	
 	
 	
+	
+	
+	public int getGroupNoCount() {
+		return groupNoCount;
+	}
+	public void setGroupNoCount(int groupNoCount) {
+		this.groupNoCount = groupNoCount;
+	}
 	public int getGroupNo() {
 		return groupNo;
 	}
@@ -75,13 +84,17 @@ public class Board {
 	public void setIndent(int indent) {
 		this.indent = indent;
 	}
+	
+	
 	@Override
 	public String toString() {
 		return "Board [no=" + no + ", title=" + title + ", writer=" + writer + ", password=" + password + ", content="
 				+ content + ", writeDate=" + writeDate + ", groupNo=" + groupNo + ", groupOrder=" + groupOrder
-				+ ", indent=" + indent + "]";
+				+ ", indent=" + indent + ", groupNoCount=" + groupNoCount + "]";
 	}
 
+	
+	
 	
 	
 }

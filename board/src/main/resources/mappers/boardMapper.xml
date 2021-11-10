@@ -14,6 +14,7 @@
 	<result property="groupNo" column="group_no" jdbcType="INTEGER" />
 	<result property="groupOrder" column="group_order" jdbcType="INTEGER" />
 	<result property="indent" column="indent" jdbcType="INTEGER" />
+	<result property="deleteStatus" column="delete_status" jdbcType="INTEGER" />
 </resultMap>
  
  <!-- 게시판 글 목록 -->
@@ -34,7 +35,7 @@
 	 <insert id="addContent" parameterType="com.test.domain.Board" >
 	 	INSERT
 		INTO BOARD(NO, TITLE, WRITER, PASSWORD, CONTENT, write_date, group_no, group_order, indent)
-		VALUES (NO_SEQ.NEXTVAL, #{title}, #{writer}, #{password}, #{content}, SYSDATE, GNO_SEQ.NEXTVAL,0,0)
+		VALUES (NO_SEQ.NEXTVAL, #{title}, #{writer}, #{password}, #{content}, SYSDATE, NO_SEQ.CURRVAL,0,0)
 	 </insert>
 	 
 	 <!-- 게시판 글 상세보기 -->
@@ -52,18 +53,31 @@
 		WHERE no=#{no}
 	 </update>
 	 
-	 <!-- 글 삭제 -->
-	 <delete id="deleteContent">
+	 <!-- 글 삭제 답글 구현 전 -->
+	 <!-- <delete id="deleteContent">
 	 	DELETE FROM board
 	 	WHERE no=#{no}
-	 </delete>
+	 </delete> -->
+	 
+	 <!-- 글 삭제 답글 구현 후 -->
+	 <update id="deleteContent" parameterType="com.test.domain.Board" >
+	    UPDATE board
+ 		SET delete_status = 1
+		WHERE no=#{no}
+	 </update>
 	 
 	 <!-- 글 목록 페이징 -->
 	 <select id="listPage" parameterType="com.test.domain.Criteria" resultMap="board">
-	 	SELECT no, title, writer, write_date 
-		FROM (SELECT ROWNUM AS no, title, writer, write_date FROM board)
+	 	SELECT no, title, writer, write_date,group_no, group_order, indent
+		FROM (SELECT ROWNUM AS no, title, writer, write_date,group_no, group_order, indent FROM 
+				(SELECT no,title, writer, write_date, group_no, group_order, indent
+				 FROM board
+				 START WITH group_order = 0
+				 CONNECT BY NOCYCLE group_no = PRIOR no
+				 ORDER SIBLINGS BY group_no DESC
+				 )
+			  )
 		WHERE no BETWEEN #{rowStart} AND #{rowEnd}
-		ORDER BY no DESC
 	 </select>
 	 
 	 <!-- 게시물 총 갯수 -->
@@ -74,12 +88,15 @@
 	 
 	 <!-- 검색 -->
 	 <select id="listSerach" resultType="com.test.domain.Board" parameterType="com.test.domain.SearchCriteria">
-		SELECT no, title, write_date, writer
-		FROM (SELECT no, title, write_date, writer,row_number() over(ORDER BY no DESC) rNum
-		FROM board
+		SELECT no, title,writer, write_date, group_no, group_order, indent
+		FROM (SELECT no, title, writer, write_date, group_no, group_order, indent, row_number() over(ORDER BY group_no DESC) rNum
+		FROM (SELECT no,title, writer, write_date, group_no, group_order, indent
+				 FROM board
+				 START WITH group_order = 0
+				 CONNECT BY NOCYCLE group_no = PRIOR no
+				 ORDER SIBLINGS BY group_order ASC)
 		<include refid="search"></include>) b
 		WHERE rNum BETWEEN #{rowStart} AND #{rowEnd}
-		ORDER BY no DESC
 	 </select>
 	 
 	 <sql id="search">
@@ -97,14 +114,32 @@
 	 </select>
 	 
 	 <!-- 답글 작성 -->
-	 <insert id="addContentReply" parameterType="com.test.domain.Board" >
+	 <insert id="addContentReply" parameterType="com.test.domain.Board">
 		INSERT INTO
 		BOARD (no, title, writer, content, password, write_date, group_no, group_order, indent)
 		VALUES (NO_SEQ.NEXTVAL, #{title}, #{writer}, #{content}, #{password}, SYSDATE, #{groupNo}, 
-		(SELECT NVL(max(#{groupOrder}),1)+1 FROM board WHERE no = #{no}), 
-        (SELECT NVL(max(#{indent}),1)+1 FROM board WHERE no = #{no}))
+		#{groupOrder}+1, 
+        (SELECT NVL(max(#{indent}),1)+1 FROM board WHERE group_no = #{groupNo} AND indent = #{indent}))
 	 </insert>
 	 
+	 <!-- 답글 작성시 groupOrder 증가 업뎃 -->
+	 <update id="updateGroupOrder" parameterType="com.test.domain.Board">
+	
+	  <![CDATA[
+	 	UPDATE board
+	 	SET group_order = group_order+1
+	 	WHERE group_no = #{groupNo} AND group_order > #{groupOrder}
+	 ]]>
+	 
+	 </update>
+	 
+	 <!-- 답글 그룹에 대한  갯수 -->
+	 <select id="groupNoCount" resultType="int">
+	 	SELECT COUNT(group_no)
+	 	
+		FROM board
+		WHERE group_no = #{groupNo}
+	 </select>
 	 
 	 
 	 <!-- 비밀번호 체크 -->

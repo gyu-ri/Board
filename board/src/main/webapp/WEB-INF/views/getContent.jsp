@@ -212,7 +212,19 @@ $(function(){
 <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
 <a href="/listPage?page=1" type="button" class="btn btn-primary" id="getList">목록으로</a>
 <a href="javascript:window.history.go(-1);" type="button" class="btn btn-primary" id="back">뒤로</a>
-   <input type="button" id="addContentReply" value="답글달기" class="btn btn-primary" >
+
+
+<form action="addContentReply" method="get" name="contentReply">
+<input type="hidden" name="no" id="no" value="${board.no}">
+<input type="text" name="groupNo" id="groupNo" value="${board.groupNo}">
+<input type="text" name="groupOrder" id="groupOrder" value="${board.groupOrder}">
+<input type="text" name="indent" id="indent" value="${board.indent}"> 
+<%-- <input type="hidden" name="title" id="title" value="${board.title}">--%>
+<button type="submit" class="btn btn-primary" id="addContentReply">답글달기</button>
+</form>
+
+<!-- <button onclick="location='addContentReply'">답글달기</button> -->
+   <!-- <input type="button" id="addContentReply" value="답글달기" class="btn btn-primary" > -->
 <!--<button id="back" class="btn btn-primary"><a href="javascript:window.history.go(-1);">뒤로</a></button>-->
 
 
@@ -238,7 +250,7 @@ $(function(){
 
 
  <!-- 댓글 list 시작 -->
- <div id="reply">
+<%--    <div id="getReply">
  	<ol class="replyList">
  		<c:forEach items="${replyList}" var="replyList">
  			<li>
@@ -250,9 +262,18 @@ $(function(){
  			</li>
  		</c:forEach>
  	</ol>
- </div>
+ </div>  --%> 
  
  <!-- 댓글 list 끝 -->
+ 
+ <div id="getReply">
+ 	<ol class="replyList">
+ 			<li>
+ 				<p>작성자</p>
+ 			</li>
+ 	</ol>
+ </div>  
+ 
  
  
  <!-- 댓글 작성 시작 -->
@@ -276,7 +297,7 @@ $(function(){
  
  </form> -->
  
- <form name="replyList" id="replyList">
+ <form name="replyList" id="replyList" >
  		 <input type="hidden" name="no" id="no" value="${board.no}">
  	<p>
  		<label>작성자</label> <input type="text" name="replyWriter" id="replyWriter">
@@ -393,6 +414,7 @@ $(function(){
 			//contentType : "application/json",
 			success : function(data){
 				console.log(data);
+				alert("성공");
 			},
 			error : function(){
 				alert("댓글 작성 실패!");
@@ -404,6 +426,30 @@ $(function(){
 }); 
 
 
+
+
+/* $(function(){
+		
+		$.ajax({
+			url : "/getReply",
+			type : "GET",
+			data : {no:$("#no").val()},
+			//async : true,
+			//dataType : "text",
+			//data : JSON.stringify(replyDate),
+			//contentType : "application/json",
+			success : function(replyList){
+				console.log(replyList);
+				$.each(replyList,function(index,item){
+					
+					//console.log(replyList);
+				$("#getReply").append("<ol class='replyList'>"+
+						"<li><p>작성자"+item.text+"</p><li></ol>");
+				})
+			}
+		});
+	
+});  */
 </script>
 
 </body>
