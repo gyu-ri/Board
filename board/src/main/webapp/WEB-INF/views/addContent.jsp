@@ -359,7 +359,9 @@ function spaceCheck(txt){
       <input type="text" name="writer" class="form-control" id="writer"  size="30" placeholder="이름을 입력하세요 (최대 5자)" >
     </div>
     <div class="form-group">
-      <label for="password" class="form-label mt-4">비밀번호</label>
+      <label for="password" class="form-label mt-4">비밀번호 
+     </label>
+     <span id="passwordCheck" style="display:none; color:red;">6~16자 영문,숫자,특수문자를 사용하여 주세요</span>
       <input type="text" name="password" class="form-control" id="password" size="50" 
              placeholder="비밀번호를 입력하세요 (8~16자 영문,숫자,특수문자를 사용하여 주세요)"  > <!-- onKeyup="this.value=this.value.replace(/[^0-9]/g,'')" -->
     </div>
@@ -490,7 +492,7 @@ function check(){
 
 <script>
 $(function(){
-	$("#content").on("input", function(){
+	$("#content").on("keyup", function(){
 		const f = document.content01;
 		const inputLength = $(this).val().length;
 		const a = $(this).val();
@@ -508,7 +510,7 @@ $(function(){
 
 
 $(function(){
-	$("#title").on("input", function(){
+	$("#title").on("keyup", function(){
 		const f = document.content01;
 		const inputLength = $(this).val().length;
 		const a = $(this).val();
@@ -523,7 +525,7 @@ $(function(){
 
 
 $(function(){
-	$("#password").on("input", function(){
+	$("#password").on("keyup", function(){
 		const f = document.content01;
 		const inputLength = $(this).val().length;
 		const a = $(this).val();
@@ -539,17 +541,22 @@ $(function(){
 		
 	 	if(f.password.value.match(pattern04)){
 			alert("한글이 입력 되었습니다");
-			//$(this).val(a.substring(0,0));
+			$(this).val(a.substring(0,0));
 			f.password.focus(); 
 			
 	 	}
 	 	
-/* 		 if(!f.password.value.match(pattern03)){
-			alert("비밀번호는 8~16자 영문,숫자,특수문자를 사용하여 주세요");
-			$(this).val(a.substring(0,0));
-			f.password.focus(); 
+		 if(!f.password.value.match(pattern03)){
+			 $("#passwordCheck").show();
+			//alert("비밀번호는 8~16자 영문,숫자,특수문자를 사용하여 주세요");
+			//$(this).val(a.substring(0,0));
+			//f.password.focus(); 
 			
-		} */
+		}else{
+			$("#passwordCheck").hide();
+		}
+
+		 
 		
 		// if(f.password.value.match(pattern03)){
 		//	 console.log("pass~~")
@@ -559,7 +566,7 @@ $(function(){
 
 
 $(function(){
-	$("#writer").on("input", function(){
+	$("#writer").on("keyup", function(){
 		const f = document.content01;
 		const inputLength = $(this).val().length;
 		const a = $(this).val();

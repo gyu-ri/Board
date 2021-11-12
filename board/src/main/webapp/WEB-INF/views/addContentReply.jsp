@@ -185,7 +185,7 @@ $(function(){
 }) */
 
 
- $(function(){
+/*  $(function(){
 	$("#content").keyup(function(){
 		const f=document.content01;
 		const pattern02 = /[a-zA-Z0-9가-힣ㄱ-ㅎㅏ-ㅣ\!\@\#\$\%\^\&\*\(\)\-\=]/gm;
@@ -239,7 +239,7 @@ $(function(){
 			f.password.focus();
 		}
 	})
-});
+}); */
 /* $(function(){
 	$("#content").mouseup(function(){
 		const f=document.content01;
@@ -349,7 +349,7 @@ function spaceCheck(txt){
     <legend>답글 작성</legend>
     <div class="form-group">
       <label for="title" class="form-label mt-4">제목</label>
-     <input type="text"  name="title" class="form-control" id="title" aria-describedby="title"  size="200" value="${board.title}">
+     <input type="text"  name="title" class="form-control" id="title" aria-describedby="title"  size="200" >
     </div>
      <div class="form-group">
       <label for="writer" class="form-label mt-4">작성자</label>
@@ -357,6 +357,7 @@ function spaceCheck(txt){
     </div>
     <div class="form-group">
       <label for="password" class="form-label mt-4">비밀번호</label>
+      <span id="passwordCheck" style="display:none; color:red;">6~16자 영문,숫자,특수문자를 사용하여 주세요</span>
       <input type="text" name="password" class="form-control" id="password" size="50" 
              placeholder="비밀번호를 입력하세요 (8~16자 영문,숫자,특수문자를 사용하여 주세요)"  > <!-- onKeyup="this.value=this.value.replace(/[^0-9]/g,'')" -->
     </div>
@@ -369,8 +370,8 @@ function spaceCheck(txt){
       <textarea class="form-control" name="content" id="content" rows="3" style="margin-top: 0px; margin-bottom: 0px; height: 500px; width: 1200px;"  placeholder="내용을 입력하세요 (최대 500자)"></textarea>
     </div>
     <input type="hidden" name="groupNo" id="groupNo" value="${board.groupNo}">
-    <input type="text" name="groupOrder" id="groupOrder" value="${board.groupOrder}">
-	<input type="text" name="indent" id="indent" value="${board.indent}"> 
+    <input type="hidden" name="groupOrder" id="groupOrder" value="${board.groupOrder}">
+	<input type="hidden" name="indent" id="indent" value="${board.indent}"> 
     <button type="submit" class="btn btn-primary" id="add">작성</button>
     <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
 <a href="/listPage?page=1" type="button" class="btn btn-primary" id="getList">목록으로</a>
@@ -488,7 +489,7 @@ function check(){
 
 <script>
 $(function(){
-	$("#content").on("input", function(){
+	$("#content").on("keyup", function(){
 		const f = document.content01;
 		const inputLength = $(this).val().length;
 		const a = $(this).val();
@@ -506,7 +507,7 @@ $(function(){
 
 
 $(function(){
-	$("#title").on("input", function(){
+	$("#title").on("keyup", function(){
 		const f = document.content01;
 		const inputLength = $(this).val().length;
 		const a = $(this).val();
@@ -521,7 +522,7 @@ $(function(){
 
 
 $(function(){
-	$("#password").on("input", function(){
+	$("#password").on("keyup", function(){
 		const f = document.content01;
 		const inputLength = $(this).val().length;
 		const a = $(this).val();
@@ -537,10 +538,21 @@ $(function(){
 		
 	 	if(f.password.value.match(pattern04)){
 			alert("한글이 입력 되었습니다");
-			//$(this).val(a.substring(0,0));
+			$(this).val(a.substring(0,0));
 			f.password.focus(); 
 			
 	 	}
+		 if(!f.password.value.match(pattern03)){
+			 $("#passwordCheck").show();
+			//alert("비밀번호는 8~16자 영문,숫자,특수문자를 사용하여 주세요");
+			//$(this).val(a.substring(0,0));
+			//f.password.focus(); 
+			
+		}else{
+			$("#passwordCheck").hide();
+		}
+	 	
+	 	
 	 	
 /* 		 if(!f.password.value.match(pattern03)){
 			alert("비밀번호는 8~16자 영문,숫자,특수문자를 사용하여 주세요");
@@ -557,7 +569,7 @@ $(function(){
 
 
 $(function(){
-	$("#writer").on("input", function(){
+	$("#writer").on("keyup", function(){
 		const f = document.content01;
 		const inputLength = $(this).val().length;
 		const a = $(this).val();

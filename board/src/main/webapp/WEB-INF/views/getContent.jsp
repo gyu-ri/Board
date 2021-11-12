@@ -49,6 +49,13 @@ transform:translate(-50%,-50%);
 
 }
 
+#addContentReply{
+position:absolute;
+left:65.5%;
+top: 805px;
+transform:translate(-50%,-50%);
+
+}
 </style>
 
 
@@ -289,9 +296,9 @@ $(function(){
 
 <form action="addContentReply" method="get" name="contentReply">
 <input type="hidden" name="no" id="no" value="${board.no}">
-<input type="text" name="groupNo" id="groupNo" value="${board.groupNo}">
-<input type="text" name="groupOrder" id="groupOrder" value="${board.groupOrder}">
-<input type="text" name="indent" id="indent" value="${board.indent}"> 
+<input type="hidden" name="groupNo" id="groupNo" value="${board.groupNo}">
+<input type="hidden" name="groupOrder" id="groupOrder" value="${board.groupOrder}">
+<input type="hidden" name="indent" id="indent" value="${board.indent}"> 
 <%-- <input type="hidden" name="title" id="title" value="${board.title}">--%>
 <button type="submit" class="btn btn-primary" id="addContentReply">답글달기</button>
 </form>

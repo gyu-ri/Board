@@ -104,7 +104,7 @@ text-align : center;
       <c:if test = "${contentList.indent == 0}">
 	      <c:if test = "${contentList.deleteStatus == 0}">
     	 	 <div id="title" onclick="location='getContent?no=${contentList.no}'" style="cursor:pointer;">
-      		 <c:out value="${contentList.title}"/><c:out value="===${contentList.groupNo}"/>
+      		 <c:out value="${contentList.title}"/>
         	 </div>
       	  </c:if>
       
@@ -116,7 +116,7 @@ text-align : center;
       <c:if test = "${contentList.indent > 0}">
        	<c:if test = "${contentList.deleteStatus == 0}">
       		<div id="title" onclick="location='getContent?no=${contentList.no}'" style="cursor:pointer; padding-left:${contentList.indent * 20}px;">
-      			<c:out value="┗ Re: ${contentList.title}"/> <c:out value="===${contentList.groupNo}"/>
+      			<c:out value="┗ Re: ${contentList.title}"/> 
       		</div>
       	</c:if>
       	
