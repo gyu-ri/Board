@@ -76,6 +76,7 @@ public class BoardController {
 	public void listSearch(@ModelAttribute("searchCriteria") SearchCriteria searchCriteria ,Model model, Criteria criteria, int page) throws Exception{
 		List<Board> contentList=boardService.listSearch(searchCriteria);
 		model.addAttribute("contentList", contentList);
+		
 		List<Board> list =boardService.contentList();
 		model.addAttribute("list", list);
 		criteria.setPage(page);
@@ -143,9 +144,9 @@ public class BoardController {
 		model.addAttribute("board", board);
 		System.out.println("getContent Controller 확인"+board);
 		
-//		List<Reply> replyList = replyService.getReply(no);
-//		model.addAttribute("replyList", replyList);
-//		System.out.println("getContent에서 replyList 확인 :: "+replyList);
+		List<Reply> replyList = replyService.getReply(no);
+		model.addAttribute("replyList", replyList);
+		System.out.println("getContent에서 replyList 확인 :: "+replyList);
 		
 		return "getContent";
 		
@@ -192,6 +193,35 @@ public class BoardController {
 	}
 	
 	
+	
+	//댓글 작성
+//	@RequestMapping(value="/addReply", method=RequestMethod.POST)
+//	public String addReply(Reply reply, Board board) throws Exception{
+//		
+//		System.out.println("addReply ajax 실행 되나요111111?");
+//		replyService.addReply(reply);
+//		System.out.println("addReply ajax 실행 되나요2222?");
+//		
+//		return "redirect:/getContent?no="+board.getNo();
+//	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	//댓글 작성
 	@ResponseBody
 	@RequestMapping(value="/addReply", method=RequestMethod.POST)
@@ -202,20 +232,38 @@ public class BoardController {
 		System.out.println("addReply ajax 실행 되나요2222?");
 	}
 	
+	//댓글 수정
+	@RequestMapping(value="/updateReply", method=RequestMethod.POST)
+	public String updateReply(Model model, Reply reply, Board board) throws Exception{
+		replyService.updateReply(reply);
+		model.addAttribute("reply", reply);
+		
+		return "redirect:/getContent?no="+board.getNo();
+		
+	}
+	
+	//댓글 삭제
+		@RequestMapping(value="/deleteReply" , method=RequestMethod.POST)
+		public String deleteReply(@RequestParam("rno") int rno, Board board) throws Exception{
+			System.out.println("어디서 오류야1");
+			replyService.deleteReply(rno);
+			System.out.println("어디서 오류야2");
+			return "redirect:/getContent?no="+board.getNo();
+		}
 	
 	//댓글 가져오기
-	@ResponseBody
-	@RequestMapping(value="/getReply", method=RequestMethod.GET)
-	public List<Reply> getReply(@RequestParam("no") int no, Model model) throws Exception{
-		
-		System.out.println("getReply ajax 실행 되나요111111?");
-		List<Reply> replyList = replyService.getReply(no);
-		System.out.println("getReply ajax 실행 되나요2222?");
-		
-		model.addAttribute("replyList", replyList);
-		
-		return replyList;
-	}
+//	@ResponseBody
+//	@RequestMapping(value="/getReply", method=RequestMethod.GET)
+//	public List<Reply> getReply(@RequestParam("no") int no, Model model) throws Exception{
+//		
+//		System.out.println("getReply ajax 실행 되나요111111?");
+//		List<Reply> replyList = replyService.getReply(no);
+//		System.out.println("getReply ajax 실행 되나요2222?");
+//		
+//		model.addAttribute("replyList", replyList);
+//		
+//		return replyList;
+//	}
 	
 	
 	

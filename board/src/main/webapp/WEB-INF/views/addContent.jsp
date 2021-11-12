@@ -184,8 +184,8 @@ $(function(){
 	
 }) */
 
-
- $(function(){
+//공백 체크
+/*  $(function(){
 	$("#content").keyup(function(){
 		const f=document.content01;
 		const pattern02 = /[a-zA-Z0-9가-힣ㄱ-ㅎㅏ-ㅣ\!\@\#\$\%\^\&\*\(\)\-\=]/gm;
@@ -239,7 +239,9 @@ $(function(){
 			f.password.focus();
 		}
 	})
-});
+}); */
+
+
 /* $(function(){
 	$("#content").mouseup(function(){
 		const f=document.content01;

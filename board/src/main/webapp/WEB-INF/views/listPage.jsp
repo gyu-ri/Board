@@ -100,23 +100,31 @@ text-align : center;
       <td id="no">${num05-((page-1)*10)-status.index}</td>
       <!--  <td onclick="location='getContent?no=${contentList.no}'" style="cursor:pointer;">${contentList.title}</td>--> 
       
- <%--     <c:forEach var="indent" begin="1" end="${baord.indent}">
-       	ddd&nbsp; <!-- indent =1 이면 띄어쓰기 한칸 하겠다 -->
-      </c:forEach>
-      <c:if test="${board.indent>0}">
-      <c:out value="Re:"/>
-      </c:if> --%>
       <td>
       <c:if test = "${contentList.indent == 0}">
-     	 <div id="title" onclick="location='getContent?no=${contentList.no}'" style="cursor:pointer;">
-      	 <c:out value="${contentList.title}"/>
-         </div>
+	      <c:if test = "${contentList.deleteStatus == 0}">
+    	 	 <div id="title" onclick="location='getContent?no=${contentList.no}'" style="cursor:pointer;">
+      		 <c:out value="${contentList.title}"/><c:out value="===${contentList.groupNo}"/>
+        	 </div>
+      	  </c:if>
+      
+      	<c:if test = "${contentList.deleteStatus == 1}">
+      	 	<c:out value="삭제된 게시물 입니다."/>
+      	</c:if>
       </c:if>
       
       <c:if test = "${contentList.indent > 0}">
+       	<c:if test = "${contentList.deleteStatus == 0}">
       		<div id="title" onclick="location='getContent?no=${contentList.no}'" style="cursor:pointer; padding-left:${contentList.indent * 20}px;">
-      			<c:out value="re: ${contentList.title}"/>
+      			<c:out value="┗ Re: ${contentList.title}"/> <c:out value="===${contentList.groupNo}"/>
       		</div>
+      	</c:if>
+      	
+       	<c:if test = "${contentList.deleteStatus == 1}">
+      		<div id="title" style="padding-left:${contentList.indent * 20}px;">
+      			<c:out value="┗ Re: 삭제된 게시물 입니다."/>
+      		</div>
+      	</c:if>
       </c:if>
       
       

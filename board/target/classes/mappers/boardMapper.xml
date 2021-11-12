@@ -10,16 +10,17 @@
 	<result property="writer" column="writer" jdbcType="VARCHAR" />
 	<result property="password" column="password" jdbcType="VARCHAR" />
 	<result property="content" column="content" jdbcType="VARCHAR" />
-	<result property="writeDate" column="write_date" jdbcType="DATE" />
+	<result property="writeDate" column="writedate" jdbcType="DATE" />
 	<result property="groupNo" column="group_no" jdbcType="INTEGER" />
 	<result property="groupOrder" column="group_order" jdbcType="INTEGER" />
 	<result property="indent" column="indent" jdbcType="INTEGER" />
-	<result property="deleteStatus" column="delete_status" jdbcType="INTEGER" />
+	<result property="deleteStatus" column="deletestatus" jdbcType="INTEGER" />
+	<result property="parentNo" column="parentNo" jdbcType="INTEGER" />
 </resultMap>
  
  <!-- 게시판 글 목록 -->
 	 <select id="contentList" parameterType="com.test.domain.Board" resultMap="board">
-		SELECT no, title, writer, write_date
+		SELECT no, title, writer, writedate
 		FROM board
 	 	ORDER BY no DESC
 	 </select>
@@ -34,13 +35,13 @@
 	 <!-- 게시판 글 작성 -->
 	 <insert id="addContent" parameterType="com.test.domain.Board" >
 	 	INSERT
-		INTO BOARD(NO, TITLE, WRITER, PASSWORD, CONTENT, write_date, group_no, group_order, indent)
+		INTO BOARD(NO, TITLE, WRITER, PASSWORD, CONTENT, writedate, group_no, group_order, indent)
 		VALUES (NO_SEQ.NEXTVAL, #{title}, #{writer}, #{password}, #{content}, SYSDATE, NO_SEQ.CURRVAL,0,0)
 	 </insert>
 	 
 	 <!-- 게시판 글 상세보기 -->
 	 <select id="getContent" parameterType="com.test.domain.Board" resultMap="board">
-		SELECT no, title, writer, write_date, content, password, group_no, group_order, indent
+		SELECT no, title, writer, writedate, content, password, group_no, group_order, indent
 		FROM board
 		WHERE no=#{no}
 	 </select>
@@ -62,15 +63,15 @@
 	 <!-- 글 삭제 답글 구현 후 -->
 	 <update id="deleteContent" parameterType="com.test.domain.Board" >
 	    UPDATE board
- 		SET delete_status = 1
+ 		SET deletestatus = 1
 		WHERE no=#{no}
 	 </update>
 	 
 	 <!-- 글 목록 페이징 -->
 	 <select id="listPage" parameterType="com.test.domain.Criteria" resultMap="board">
-	 	SELECT no, title, writer, write_date,group_no, group_order, indent
-		FROM (SELECT ROWNUM AS no, title, writer, write_date,group_no, group_order, indent FROM 
-				(SELECT no,title, writer, write_date, group_no, group_order, indent
+	 	SELECT no, title, writer, writedate,group_no, group_order, indent
+		FROM (SELECT ROWNUM AS no, title, writer, writedate,group_no, group_order, indent FROM 
+				(SELECT no,title, writer, writedate, group_no, group_order, indent
 				 FROM board
 				 START WITH group_order = 0
 				 CONNECT BY NOCYCLE group_no = PRIOR no
@@ -87,17 +88,42 @@
 	 </select>
 	 
 	 <!-- 검색 -->
-	 <select id="listSerach" resultType="com.test.domain.Board" parameterType="com.test.domain.SearchCriteria">
-		SELECT no, title,writer, write_date, group_no, group_order, indent
-		FROM (SELECT no, title, writer, write_date, group_no, group_order, indent, row_number() over(ORDER BY group_no DESC) rNum
-		FROM (SELECT no,title, writer, write_date, group_no, group_order, indent
+	 <select id="listSerach" resultType="com.test.domain.Board" parameterType="com.test.domain.SearchCriteria" >
+		SELECT no, title,writer, writeDate, group_no, group_order, indent, deletestatus, parentNo
+		FROM (SELECT no, title, writer, writedate, group_no, group_order, indent,deletestatus,parentNo,row_number() over(ORDER BY group_no DESC) rNum
+		FROM (SELECT no, title,writer, writeDate, group_no, group_order, indent, deletestatus, parentNo
+			  FROM board
+			  ORDER BY group_order ASC)
+		<include refid="search"></include>) b
+		WHERE rNum BETWEEN #{rowStart} AND #{rowEnd}
+		ORDER BY group_no DESC, group_order
+	 </select>
+	 
+	 <!-- 검색 -->
+<!-- 	 <select id="listSerach" resultType="com.test.domain.Board" parameterType="com.test.domain.SearchCriteria" >
+		SELECT no, title,writer, writeDate, group_no, group_order, indent, deletestatus
+		FROM (SELECT no, title, writer, writedate, group_no, group_order, indent,deletestatus,row_number() over(ORDER BY group_no DESC) rNum
+		FROM (SELECT no,title, writer, writedate, group_no, group_order, indent, deletestatus
 				 FROM board
 				 START WITH group_order = 0
 				 CONNECT BY NOCYCLE group_no = PRIOR no
 				 ORDER SIBLINGS BY group_order ASC)
 		<include refid="search"></include>) b
 		WHERE rNum BETWEEN #{rowStart} AND #{rowEnd}
-	 </select>
+	 </select> -->
+	 
+	 <!-- 검색 -->
+	<!--  <select id="listSerach" resultType="com.test.domain.Board" parameterType="com.test.domain.SearchCriteria" >
+		SELECT no, title,writer, writeDate, group_no, group_order, indent, deletestatus
+		FROM (SELECT ROWNUM as rNum, no, title, writer, writedate, group_no, group_order, indent,deletestatus
+		FROM (SELECT no,title, writer, writedate, group_no, group_order, indent, deletestatus
+				 FROM board
+				 START WITH group_order = 0
+				 CONNECT BY NOCYCLE group_no = PRIOR no
+				 ORDER SIBLINGS BY group_order ASC)
+		<include refid="search"></include>) b
+		WHERE rNum BETWEEN #{rowStart} AND #{rowEnd}
+	 </select> -->
 	 
 	 <sql id="search">
 	 	<if test="searchType != null">
@@ -116,10 +142,11 @@
 	 <!-- 답글 작성 -->
 	 <insert id="addContentReply" parameterType="com.test.domain.Board">
 		INSERT INTO
-		BOARD (no, title, writer, content, password, write_date, group_no, group_order, indent)
+		BOARD (no, title, writer, content, password, writedate, group_no, group_order, indent, deletestatus, parentNo)
 		VALUES (NO_SEQ.NEXTVAL, #{title}, #{writer}, #{content}, #{password}, SYSDATE, #{groupNo}, 
 		#{groupOrder}+1, 
-        (SELECT NVL(max(#{indent}),1)+1 FROM board WHERE group_no = #{groupNo} AND indent = #{indent}))
+        (SELECT NVL(max(#{indent}),1)+1 FROM board WHERE group_no = #{groupNo} AND indent = #{indent}),
+        DEFAULT, NO_SEQ.CURRVAL)
 	 </insert>
 	 
 	 <!-- 답글 작성시 groupOrder 증가 업뎃 -->

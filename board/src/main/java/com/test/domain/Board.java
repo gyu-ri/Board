@@ -11,12 +11,13 @@ public class Board {
 	private String password;
 	private String content;
 	private Date writeDate;
-	
 	//답글 변수
 	private int groupNo;
 	private int groupOrder;
 	private int indent;
 	private int groupNoCount;
+	private int deleteStatus;
+	private int parentNo;
 	
 	
 	public int getNo() {
@@ -60,6 +61,18 @@ public class Board {
 	
 	
 	
+	public int getParentNo() {
+		return parentNo;
+	}
+	public void setParentNo(int parentNo) {
+		this.parentNo = parentNo;
+	}
+	public int getDeleteStatus() {
+		return deleteStatus;
+	}
+	public void setDeleteStatus(int deleteStatus) {
+		this.deleteStatus = deleteStatus;
+	}
 	public int getGroupNoCount() {
 		return groupNoCount;
 	}
@@ -86,14 +99,14 @@ public class Board {
 	}
 	
 	
+	
 	@Override
 	public String toString() {
 		return "Board [no=" + no + ", title=" + title + ", writer=" + writer + ", password=" + password + ", content="
 				+ content + ", writeDate=" + writeDate + ", groupNo=" + groupNo + ", groupOrder=" + groupOrder
-				+ ", indent=" + indent + ", groupNoCount=" + groupNoCount + "]";
+				+ ", indent=" + indent + ", groupNoCount=" + groupNoCount + ", deleteStatus=" + deleteStatus
+				+ ", parentNo=" + parentNo + "]";
 	}
-
-	
 	
 	
 	

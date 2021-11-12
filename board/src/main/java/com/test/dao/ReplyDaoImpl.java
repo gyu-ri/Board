@@ -28,6 +28,19 @@ public class ReplyDaoImpl implements ReplyDao {
 	public void addReply(Reply reply) throws Exception {
 		sqlsession.insert("replyMapper.addReply", reply);
 	}
+
+	//댓글 수정
+	@Override
+	public void updateReply(Reply reply) throws Exception {
+		sqlsession.update("replyMapper.updateReply", reply);
+	}
+
+	//댓글 삭제
+	@Override
+	public void deleteReply(int rno) throws Exception {
+		sqlsession.delete("replyMapper.deleteReply", rno);
+		
+	}
 	
 	
 	

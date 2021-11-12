@@ -28,6 +28,18 @@ public class ReplyServiceImpl implements ReplyService{
 		replyDao.addReply(reply);
 		
 	}
+
+	//댓글 수정
+	@Override
+	public void updateReply(Reply reply) throws Exception {
+		replyDao.updateReply(reply);
+	}
+
+	//댓글 삭제
+	@Override
+	public void deleteReply(int rno) throws Exception {
+		replyDao.deleteReply(rno);
+	}
 	
 	
 
