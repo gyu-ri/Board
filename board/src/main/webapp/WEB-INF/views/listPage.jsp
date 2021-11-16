@@ -10,7 +10,7 @@
     <!-- include libraries(jQuery, bootstrap) -->
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     
-    <!-- 합쳐지고 최소화된 최신 CSS -->
+<!-- 합쳐지고 최소화된 최신 CSS -->
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
 
 <!-- 부가적인 테마 -->
@@ -95,9 +95,20 @@ text-align : center;
 
     <c:forEach items= "${contentList}" var="contentList" varStatus="status" >
     <tr>
+    <c:if test = "${contentList.indent == 0}">
     <c:set var="page" value="${criteria.page}"/>
     <c:set var="num05" value="${pageMaker.totalCount}"/>
       <td id="no">${num05-((page-1)*10)-status.index}</td>
+      </c:if>
+      <c:if test = "${0 ne contentList.indent}">
+       <td id="no">&nbsp;</td>
+      </c:if>
+      
+  <%--      <c:if test = "${null ne searchCriteria.keyword}">
+       <td id="no">${num05-((page-1)*10)-status.index}</td>
+      </c:if> --%>
+      
+    
       <!--  <td onclick="location='getContent?no=${contentList.no}'" style="cursor:pointer;">${contentList.title}</td>--> 
       
       <td>
@@ -105,6 +116,10 @@ text-align : center;
 	      <c:if test = "${contentList.deleteStatus == 0}">
     	 	 <div id="title" onclick="location='getContent?no=${contentList.no}'" style="cursor:pointer;">
       		 <c:out value="${contentList.title}"/>
+      		  <c:out value="[${contentList.replyCount}]"/>  
+      		 <c:if test = "${null ne contentList.fileName}">
+      		 <span class="glyphicon glyphicon-paperclip"></span>
+      		 </c:if>
         	 </div>
       	  </c:if>
       
@@ -116,7 +131,7 @@ text-align : center;
       <c:if test = "${contentList.indent > 0}">
        	<c:if test = "${contentList.deleteStatus == 0}">
       		<div id="title" onclick="location='getContent?no=${contentList.no}'" style="cursor:pointer; padding-left:${contentList.indent * 20}px;">
-      			<c:out value="┗ Re: ${contentList.title}"/> 
+      			<c:out value="┗ Re: ${contentList.title}"/> <c:out value="[${contentList.replyCount}]"/>    
       		</div>
       	</c:if>
       	

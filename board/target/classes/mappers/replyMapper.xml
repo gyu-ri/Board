@@ -44,5 +44,11 @@
 	 	WHERE rno=#{rno}
 	 </delete> 
 
+<!-- 댓글 갯수 구하기 -->
+ 	<select id = "replyCount" parameterType = "int">
+		SELECT COUNT(rno)
+		FROM reply
+		WHERE no= #{no}
+	</select>
 
 </mapper>

@@ -49,14 +49,12 @@ public class Reply {
 		this.writeDate = writeDate;
 	}
 	
+
 	@Override
 	public String toString() {
 		return "Reply [no=" + no + ", rno=" + rno + ", text=" + text + ", writer=" + writer + ", password=" + password
 				+ ", writeDate=" + writeDate + "]";
 	}
-	
-	
-	
 	
 
 }

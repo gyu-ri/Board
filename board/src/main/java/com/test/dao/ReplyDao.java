@@ -18,4 +18,10 @@ public interface ReplyDao {
 	
 	//댓글 삭제
 	public void deleteReply(int rno) throws Exception;
+	
+	//댓글 갯수 조회
+	public int replyCount() throws Exception;
+	//댓글 갯수 조회
+//	public int countReply() throws Exception;
 }
+

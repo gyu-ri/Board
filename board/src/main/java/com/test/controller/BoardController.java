@@ -1,22 +1,30 @@
 package com.test.controller;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.List;
 import java.util.logging.Logger;
 
+import javax.annotation.Resource;
 import javax.inject.Inject;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
+import com.fasterxml.jackson.databind.ser.std.FileSerializer;
 import com.test.domain.Board;
 import com.test.domain.Criteria;
 import com.test.domain.PageMaker;
@@ -36,6 +44,8 @@ public class BoardController {
 	
 	@Autowired
 	ReplyService replyService;
+	
+
 	
 	//글목록
 	@RequestMapping(value="/contentList", method=RequestMethod.GET)
@@ -73,7 +83,7 @@ public class BoardController {
 	
 	//글목록 + 페이징 + 검색
 	@RequestMapping(value="/listPage", method=RequestMethod.GET)
-	public void listSearch(@ModelAttribute("searchCriteria") SearchCriteria searchCriteria ,Model model, Criteria criteria, int page) throws Exception{
+	public void listSearch(@ModelAttribute("searchCriteria") SearchCriteria searchCriteria ,Model model, Criteria criteria, int page, Board board) throws Exception{
 		List<Board> contentList=boardService.listSearch(searchCriteria);
 		model.addAttribute("contentList", contentList);
 		
@@ -82,6 +92,19 @@ public class BoardController {
 		criteria.setPage(page);
 		model.addAttribute("criteria", criteria);
 		
+		//int replyCount = replyService.replyCount();
+		
+		//board.setReplyCount(replyCount);
+		
+		//System.out.println("%%%%%%%%%%%%%%%%%"+replyCount);
+		
+		
+		
+		//int countReply = replyService.countReply();
+		//reply.getCountReply();
+		//System.out.println("zzzzz"+reply.getCountReply());
+		//reply.setCountReply(countReply);
+		//System.out.println("$$$$$$$$"+countReply);
 		
 		System.out.println("@@@@@@@@"+contentList);
 		PageMaker pageMaker = new PageMaker();
@@ -98,14 +121,43 @@ public class BoardController {
 		// return "redirect:/listPage";
 	}
 	
-	//글작성
+	//글작성 파일 업로드 전 
+//	@RequestMapping(value="/addContent", method=RequestMethod.POST)
+//	public String addContent(Board board,Criteria criteria) throws Exception{
+//		System.out.println("boardController addContent post 시작");
+//		boardService.addContent(board);
+//		return "redirect:/listPage?page="+criteria.getPage();
+//	}
+	
+	
+	@Resource(name="uploadPath")
+	String uploadPath;
+	//글작성  ,required = false
 	@RequestMapping(value="/addContent", method=RequestMethod.POST)
-	public String addContent(Board board,Criteria criteria) throws Exception{
+	public String addContent(Board board,Criteria criteria, @RequestParam(name="file") MultipartFile file) throws Exception{
 		System.out.println("boardController addContent post 시작");
+		System.out.println("파일 이름"+file.getOriginalFilename());
+		System.out.println("파일 크기"+file.getSize());
+		
+		String originalFileName = file.getOriginalFilename();
+		String safeFile = uploadPath + System.currentTimeMillis() + originalFileName;
+		board.setFileName(originalFileName);
+		System.out.println("**************"+board.getFileName());
+		
+		try {
+			file.transferTo(new File(safeFile));
+		}catch (IllegalStateException e) {
+			e.printStackTrace();
+		}catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		
 		boardService.addContent(board);
 		return "redirect:/listPage?page="+criteria.getPage();
 	}
-
+	
+	
 	//답글 작성
 	@RequestMapping(value="/addContentReply", method=RequestMethod.GET)
 	public void addContentReply(int no, Model model) throws Exception{
@@ -137,12 +189,30 @@ public class BoardController {
 	
 	
 	
+	//상세보기 파일 업로드 전
+//	@RequestMapping(value="/getContent", method=RequestMethod.GET)
+//	public String getContent(Model model, int no) throws Exception{
+//		Board board=boardService.getContent(no);
+//		model.addAttribute("board", board);
+//		System.out.println("getContent Controller 확인"+board);
+//		
+//		List<Reply> replyList = replyService.getReply(no);
+//		model.addAttribute("replyList", replyList);
+//		System.out.println("getContent에서 replyList 확인 :: "+replyList);
+//		
+//		return "getContent";
+//		
+//	}
+	
 	//상세보기
 	@RequestMapping(value="/getContent", method=RequestMethod.GET)
+	//public String getContent(Model model, int no, @PathVariable("fileDownload") Integer fileId) throws Exception{
 	public String getContent(Model model, int no) throws Exception{
+		
 		Board board=boardService.getContent(no);
 		model.addAttribute("board", board);
 		System.out.println("getContent Controller 확인"+board);
+		System.out.println("&&&&&&&&&&&&&&&&&"+board.getFileName());
 		
 		List<Reply> replyList = replyService.getReply(no);
 		model.addAttribute("replyList", replyList);
@@ -163,7 +233,7 @@ public class BoardController {
 		return "updateContent";
 	}
 	
-	//게시물 수정
+	//게시물 수정 파일 업다운 전
 	@RequestMapping(value="/updateContent", method=RequestMethod.POST)
 	public String updateContent(Model model, Board board) throws Exception{
 		boardService.updateContent(board);
@@ -173,6 +243,30 @@ public class BoardController {
 		return "redirect:/getContent?no="+board.getNo();
 		
 	}
+	
+//	@RequestMapping(value="/updateContent", method=RequestMethod.POST)
+//	public String updateContent(Model model, Board board, @RequestParam(name="file") MultipartFile file) throws Exception{
+//		
+//		String originalFileName = file.getOriginalFilename();
+//		String safeFile = uploadPath + System.currentTimeMillis() + originalFileName;
+//		board.setFileName(originalFileName);
+//		System.out.println("**************"+board.getFileName());
+//		
+//		try {
+//			file.transferTo(new File(safeFile));
+//		}catch (IllegalStateException e) {
+//			e.printStackTrace();
+//		}catch (IOException e) {
+//			e.printStackTrace();
+//		}
+//		
+//		boardService.updateContent(board);
+//		model.addAttribute("board", board);
+//		System.out.println("updateContent Controller  POST 확인"+board);
+//		
+//		return "redirect:/getContent?no="+board.getNo();
+//		
+//	}
 	
 	
 	

@@ -40,8 +40,21 @@ public class ReplyServiceImpl implements ReplyService{
 	public void deleteReply(int rno) throws Exception {
 		replyDao.deleteReply(rno);
 	}
-	
-	
+
+	//댓글 갯수 조회
+	@Override
+	public int replyCount() throws Exception {
+		return replyDao.replyCount();
+	}
+
+	//댓글 갯수 조회
+//	@Override
+//	public int countReply() throws Exception {
+//		return replyDao.countReply();
+//		
+//	}
+//	
+//	
 
 	
 

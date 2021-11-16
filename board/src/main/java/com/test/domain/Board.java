@@ -11,14 +11,17 @@ public class Board {
 	private String password;
 	private String content;
 	private Date writeDate;
-	//답글 변수
+
 	private int groupNo;
 	private int groupOrder;
 	private int indent;
 	private int groupNoCount;
 	private int deleteStatus;
 	private int parentNo;
+	private int replyCount;
 	
+	private String fileName;
+	private String uploadPath;
 	
 	public int getNo() {
 		return no;
@@ -61,6 +64,25 @@ public class Board {
 	
 	
 	
+	
+	public String getUploadPath() {
+		return uploadPath;
+	}
+	public void setUploadPath(String uploadPath) {
+		this.uploadPath = uploadPath;
+	}
+	public String getFileName() {
+		return fileName;
+	}
+	public void setFileName(String fileName) {
+		this.fileName = fileName;
+	}
+	public int getReplyCount() {
+		return replyCount;
+	}
+	public void setReplyCount(int replyCount) {
+		this.replyCount = replyCount;
+	}
 	public int getParentNo() {
 		return parentNo;
 	}
@@ -97,15 +119,13 @@ public class Board {
 	public void setIndent(int indent) {
 		this.indent = indent;
 	}
-	
-	
-	
 	@Override
 	public String toString() {
 		return "Board [no=" + no + ", title=" + title + ", writer=" + writer + ", password=" + password + ", content="
 				+ content + ", writeDate=" + writeDate + ", groupNo=" + groupNo + ", groupOrder=" + groupOrder
 				+ ", indent=" + indent + ", groupNoCount=" + groupNoCount + ", deleteStatus=" + deleteStatus
-				+ ", parentNo=" + parentNo + "]";
+				+ ", parentNo=" + parentNo + ", replyCount=" + replyCount + ", fileName=" + fileName + ", uploadPath="
+				+ uploadPath + "]";
 	}
 	
 	

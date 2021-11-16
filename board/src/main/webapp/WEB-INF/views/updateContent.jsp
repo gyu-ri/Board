@@ -1,6 +1,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt"  prefix="fmt"%>
+<c:set var="contextPath" value="${pageContext.servletContext.contextPath}" scope="application" />
 <!DOCTYPE html>
 <html>
 <head>
@@ -303,7 +304,7 @@ $(function(){
 
 
 $(function(){
-	$("#content").on("input", function(){
+	$("#content").on("keyup", function(){
 		const f = document.content01;
 		const inputLength = $(this).val().length;
 		const a = $(this).val();
@@ -321,7 +322,7 @@ $(function(){
 
 
 $(function(){
-	$("#title").on("input", function(){
+	$("#title").on("keyup", function(){
 		const f = document.content01;
 		const inputLength = $(this).val().length;
 		const a = $(this).val();
@@ -336,7 +337,7 @@ $(function(){
 
 
 $(function(){
-	$("#password").on("input", function(){
+	$("#password").on("keyup", function(){
 		const f = document.content01;
 		const inputLength = $(this).val().length;
 		const a = $(this).val();
@@ -361,7 +362,7 @@ $(function(){
 
 
 $(function(){
-	$("#writer").on("input", function(){
+	$("#writer").on("keyup", function(){
 		const f = document.content01;
 		const inputLength = $(this).val().length;
 		const a = $(this).val();
@@ -373,6 +374,10 @@ $(function(){
 		
 	})
 });
+
+
+
+
 
 
 
@@ -388,8 +393,8 @@ $(function(){
 </script>  -->
 
 </head>
-<body>
-		<form action="updateContent" method="post" name="updateContent01" onsubmit="return check()">
+<body>v
+		<form action="updateContent" method="post" name="updateContent01" onsubmit="return check()" enctype="multipart/form-data">
   <fieldset>
     <legend>글수정</legend>
     <div class="form-group">
@@ -410,6 +415,14 @@ $(function(){
       <span id="textLength">(0/500)</span>
       <textarea class="form-control" name="content"  id="content" rows="3" style="margin-top: 0px; margin-bottom: 0px; height: 500px; width: 1200px;"><c:out value="${board.content}"/></textarea>
     </div>
+    
+     <div class="form-group">
+      <label for="file" class="form-label mt-4">파일 첨부</label>
+       <a href="${contextPath}/${board.fileName}" download><c:out value="${board.fileName}"/></a>
+     <!--   <input type="button" value="변경" id="changeFile">
+      <input type="file" name="file" class="form-control" id="fileUpload" > -->
+    </div> 
+    
     <input type="hidden" name="no" id="no" value="${board.no}"/><br />
     <input type="submit" id="updateContent" class="btn btn-primary" value="수정완료">
   </fieldset>
