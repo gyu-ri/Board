@@ -52,7 +52,10 @@
 	 <!-- 글 수정 -->
 	 <update id="updateContent" parameterType="com.test.domain.Board" >
 	    UPDATE board
- 		SET content=#{content}, title=#{title}, writer=#{writer}, fileName=#{fileName}
+ 		SET content=#{content}, title=#{title}, writer=#{writer}, 
+ 		<if test = "fileName ! = null">
+ 		fileName=#{fileName}
+ 		</if>
 		WHERE no=#{no}
 	 </update>
 	 
@@ -91,9 +94,9 @@
 	 
 	 <!-- 검색 -->
 	 <select id="listSerach" resultType="com.test.domain.Board" parameterType="com.test.domain.SearchCriteria" >
-		SELECT no, title,writer, writeDate, group_no, group_order, indent, deletestatus, parentNo, fileName
-		FROM (SELECT no, title, writer, writedate, group_no, group_order, indent,deletestatus,parentNo,fileName,row_number() over(ORDER BY group_no DESC) rNum
-		FROM (SELECT no, title,writer, writeDate, group_no, group_order, indent, deletestatus, parentNo,fileName
+		SELECT no, title,writer, writeDate, group_no, group_order, indent, deletestatus, parentNo, fileName,(SELECT COUNT(*) FROM reply WHERE no=b.no) replyCount
+		FROM (SELECT no, title, writer, writedate, group_no, group_order, indent,deletestatus,parentNo,replyCount,fileName,row_number() over(ORDER BY group_no DESC) rNum
+		FROM (SELECT no, title,writer, writeDate, group_no, group_order, indent, deletestatus, parentNo,fileName,replyCount
 			  FROM board
 			  ORDER BY group_order ASC)
 		<include refid="search"></include>) b
@@ -144,11 +147,11 @@
 	 <!-- 답글 작성 -->
 	 <insert id="addContentReply" parameterType="com.test.domain.Board">
 		INSERT INTO
-		BOARD (no, title, writer, content, password, writedate, group_no, group_order, indent, deletestatus, parentNo)
+		BOARD (no, title, writer, content, password, writedate, group_no, group_order, indent, deletestatus, parentNo,fileName)
 		VALUES (NO_SEQ.NEXTVAL, #{title}, #{writer}, #{content}, #{password}, SYSDATE, #{groupNo}, 
 		#{groupOrder}+1, 
         (SELECT NVL(max(#{indent}),1)+1 FROM board WHERE group_no = #{groupNo} AND indent = #{indent}),
-        DEFAULT, NO_SEQ.CURRVAL)
+        DEFAULT, NO_SEQ.CURRVAL,#{fileName})
 	 </insert>
 	 
 	 <!-- 답글 작성시 groupOrder 증가 업뎃 -->

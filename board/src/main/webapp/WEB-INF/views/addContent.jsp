@@ -500,7 +500,7 @@ function check(){
 
 <script>
 $(function(){
-	$("#content").on("keyup", function(){
+	$("#content").on("input", function(){
 		const f = document.content01;
 		const inputLength = $(this).val().length;
 		const a = $(this).val();

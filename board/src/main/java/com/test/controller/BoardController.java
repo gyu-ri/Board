@@ -45,7 +45,8 @@ public class BoardController {
 	@Autowired
 	ReplyService replyService;
 	
-
+	@Resource(name="uploadPath")
+	String uploadPath;
 	
 	//글목록
 	@RequestMapping(value="/contentList", method=RequestMethod.GET)
@@ -92,6 +93,7 @@ public class BoardController {
 		criteria.setPage(page);
 		model.addAttribute("criteria", criteria);
 		
+		
 		//int replyCount = replyService.replyCount();
 		
 		//board.setReplyCount(replyCount);
@@ -130,8 +132,7 @@ public class BoardController {
 //	}
 	
 	
-	@Resource(name="uploadPath")
-	String uploadPath;
+
 	//글작성  ,required = false
 	@RequestMapping(value="/addContent", method=RequestMethod.POST)
 	public String addContent(Board board,Criteria criteria, @RequestParam(name="file") MultipartFile file) throws Exception{
@@ -167,22 +168,41 @@ public class BoardController {
 		// return "redirect:/listPage";
 	}
 	
-	//답글 작성
-	@RequestMapping(value="/addContentReply", method=RequestMethod.POST)
-	public String addContentReply(Board board, Criteria criteria ,Model model,int groupNo) throws Exception{
-		System.out.println("addContentReply post 시작~~~");
-		boardService.addContentReply(board);
-		
-		//Board board02 = new Board();
-	//	board.setGroupNoCount(boardService.groupNoCount(groupNo));
-		//System.out.println("@@@@@@@@@@@@@@@@@@@@"+board.getGroupNoCount());
-		//boardService.updateGroupOrder(board);
-		//System.out.println("addContentReply post 시작~~~4444"+groupOrder);
-		
+	//답글 작성 파일 업로드 전
+//	@RequestMapping(value="/addContentReply", method=RequestMethod.POST)
+//	public String addContentReply(Board board, Criteria criteria ,Model model,int groupNo) throws Exception{
+//		System.out.println("addContentReply post 시작~~~");
+//		boardService.addContentReply(board);
+//		
+//		
 //		if(board.getGroupNoCount() > 1) {
 //			boardService.updateGroupOrder(board);
 //			System.out.println("@@@@@@@@@@@@@@@@@@@@"+board.getGroupNo());
 //		}
+//		return "redirect:/listPage?page="+criteria.getPage();
+//	}
+	
+	//답글 작성
+	@RequestMapping(value="/addContentReply", method=RequestMethod.POST)
+	public String addContentReply(Board board, Criteria criteria ,Model model,int groupNo, @RequestParam("file") MultipartFile file) throws Exception{
+		System.out.println("addContentReply post 시작~~~");
+		
+		String originalFileName = file.getOriginalFilename();
+		String safeFile = uploadPath + System.currentTimeMillis() + originalFileName;
+		board.setFileName(originalFileName);
+		
+		try {
+			file.transferTo(new File(safeFile));
+		}catch (IllegalStateException e) {
+			e.printStackTrace();
+		}catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		
+		boardService.addContentReply(board);
+		
+
 		return "redirect:/listPage?page="+criteria.getPage();
 	}
 	
@@ -234,32 +254,8 @@ public class BoardController {
 	}
 	
 	//게시물 수정 파일 업다운 전
-	@RequestMapping(value="/updateContent", method=RequestMethod.POST)
-	public String updateContent(Model model, Board board) throws Exception{
-		boardService.updateContent(board);
-		model.addAttribute("board", board);
-		System.out.println("updateContent Controller  POST 확인"+board);
-		
-		return "redirect:/getContent?no="+board.getNo();
-		
-	}
-	
 //	@RequestMapping(value="/updateContent", method=RequestMethod.POST)
-//	public String updateContent(Model model, Board board, @RequestParam(name="file") MultipartFile file) throws Exception{
-//		
-//		String originalFileName = file.getOriginalFilename();
-//		String safeFile = uploadPath + System.currentTimeMillis() + originalFileName;
-//		board.setFileName(originalFileName);
-//		System.out.println("**************"+board.getFileName());
-//		
-//		try {
-//			file.transferTo(new File(safeFile));
-//		}catch (IllegalStateException e) {
-//			e.printStackTrace();
-//		}catch (IOException e) {
-//			e.printStackTrace();
-//		}
-//		
+//	public String updateContent(Model model, Board board) throws Exception{
 //		boardService.updateContent(board);
 //		model.addAttribute("board", board);
 //		System.out.println("updateContent Controller  POST 확인"+board);
@@ -267,6 +263,30 @@ public class BoardController {
 //		return "redirect:/getContent?no="+board.getNo();
 //		
 //	}
+	//게시물 수정
+	@RequestMapping(value="/updateContent", method=RequestMethod.POST)
+	public String updateContent(Model model, Board board, @RequestParam(name="file") MultipartFile file) throws Exception{
+		
+		String originalFileName = file.getOriginalFilename();
+		String safeFile = uploadPath + System.currentTimeMillis() + originalFileName;
+		board.setFileName(originalFileName);
+		System.out.println("**************"+board.getFileName());
+		
+		try {
+			file.transferTo(new File(safeFile));
+		}catch (IllegalStateException e) {
+			e.printStackTrace();
+		}catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		boardService.updateContent(board);
+		model.addAttribute("board", board);
+		System.out.println("updateContent Controller  POST 확인"+board);
+		
+		return "redirect:/getContent?no="+board.getNo();
+		
+	}
 	
 	
 	

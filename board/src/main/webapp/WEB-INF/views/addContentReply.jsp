@@ -344,7 +344,7 @@ function spaceCheck(txt){
 <body>
 
 
-<form action="addContentReply" method="post" name="content01" onsubmit="return check()" >
+<form action="addContentReply" method="post" name="content01" onsubmit="return check()" enctype="multipart/form-data">
   <fieldset>
     <legend>답글 작성</legend>
     <div class="form-group">
@@ -369,6 +369,12 @@ function spaceCheck(txt){
       <!--<input type="text" id="textLength" readonly style="border:none;">-->
       <textarea class="form-control" name="content" id="content" rows="3" style="margin-top: 0px; margin-bottom: 0px; height: 500px; width: 1200px;"  placeholder="내용을 입력하세요 (최대 500자)"></textarea>
     </div>
+    
+     <div class="form-group">
+      <label for="file" class="form-label mt-4">파일 첨부</label>
+      <input type="file" name="file" class="form-control" id="fileUpload" >
+    </div>
+    
     <input type="hidden" name="groupNo" id="groupNo" value="${board.groupNo}">
     <input type="hidden" name="groupOrder" id="groupOrder" value="${board.groupOrder}">
 	<input type="hidden" name="indent" id="indent" value="${board.indent}"> 

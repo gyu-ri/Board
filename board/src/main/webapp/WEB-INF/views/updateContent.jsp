@@ -393,7 +393,7 @@ $(function(){
 </script>  -->
 
 </head>
-<body>v
+<body>
 		<form action="updateContent" method="post" name="updateContent01" onsubmit="return check()" enctype="multipart/form-data">
   <fieldset>
     <legend>글수정</legend>
@@ -419,6 +419,7 @@ $(function(){
      <div class="form-group">
       <label for="file" class="form-label mt-4">파일 첨부</label>
        <a href="${contextPath}/${board.fileName}" download><c:out value="${board.fileName}"/></a>
+       <input type="file" name="file" class="form-control" id="file" >
      <!--   <input type="button" value="변경" id="changeFile">
       <input type="file" name="file" class="form-control" id="fileUpload" > -->
     </div> 

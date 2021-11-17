@@ -112,29 +112,52 @@ text-align : center;
       <!--  <td onclick="location='getContent?no=${contentList.no}'" style="cursor:pointer;">${contentList.title}</td>--> 
       
       <td>
+      <!-- 들여쓰기-->
       <c:if test = "${contentList.indent == 0}">
+      <!-- 삭제 상태 -->
 	      <c:if test = "${contentList.deleteStatus == 0}">
     	 	 <div id="title" onclick="location='getContent?no=${contentList.no}'" style="cursor:pointer;">
       		 <c:out value="${contentList.title}"/>
-      		  <c:out value="[${contentList.replyCount}]"/>  
+      		 
+      		 <!-- 댓글 갯수 -->
+      		 <c:if test = "${contentList.replyCount > 0}">
+      		 	 <c:out value="[${contentList.replyCount}]"/>
+      		  </c:if>  
+      		  
+      		  <!-- 첨부파일 이미지 --> 
       		 <c:if test = "${null ne contentList.fileName}">
       		 <span class="glyphicon glyphicon-paperclip"></span>
       		 </c:if>
+      		 
         	 </div>
       	  </c:if>
       
+      <!-- 삭제 상태 -->
       	<c:if test = "${contentList.deleteStatus == 1}">
       	 	<c:out value="삭제된 게시물 입니다."/>
       	</c:if>
       </c:if>
       
+      <!-- 답글 들여쓰기-->
       <c:if test = "${contentList.indent > 0}">
+      <!-- 답글 삭제 상태 -->
        	<c:if test = "${contentList.deleteStatus == 0}">
       		<div id="title" onclick="location='getContent?no=${contentList.no}'" style="cursor:pointer; padding-left:${contentList.indent * 20}px;">
-      			<c:out value="┗ Re: ${contentList.title}"/> <c:out value="[${contentList.replyCount}]"/>    
+      			<c:out value="┗ Re: ${contentList.title}"/> 
+      		
+      		<!-- 답글 댓글 갯수 -->
+      			<c:if test = "${contentList.replyCount > 0}">
+      			<c:out value="[${contentList.replyCount}]"/>
+      			</c:if>    
+      		
+      		<!-- 답글 첨부파일 이미지 --> 
+      		 <c:if test = "${null ne contentList.fileName}">
+      			 <span class="glyphicon glyphicon-paperclip"></span>
+      		 </c:if>
+      		
       		</div>
       	</c:if>
-      	
+      	<!-- 답글 삭제 상태 -->
        	<c:if test = "${contentList.deleteStatus == 1}">
       		<div id="title" style="padding-left:${contentList.indent * 20}px;">
       			<c:out value="┗ Re: 삭제된 게시물 입니다."/>
