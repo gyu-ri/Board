@@ -346,7 +346,7 @@ function spaceCheck(txt){
 <body>
 
 
-<form action="addContent" method="post" name="content01" onsubmit="return check()" >
+<form action="addContent" method="post" name="content01" onsubmit="return check()" enctype="multipart/form-data">
   <fieldset>
     <legend>글작성</legend>
 <c:out value="${board.groupNo}"/>
@@ -373,6 +373,13 @@ function spaceCheck(txt){
       <!--<input type="text" id="textLength" readonly style="border:none;">-->
       <textarea class="form-control" name="content" id="content" rows="3" style="margin-top: 0px; margin-bottom: 0px; height: 500px; width: 1200px;"  placeholder="내용을 입력하세요 (최대 500자)"></textarea>
     </div>
+    
+    
+     <div class="form-group">
+      <label for="file" class="form-label mt-4">파일 첨부</label>
+      <input type="file" name="file" class="form-control" id="fileUpload" >
+    </div>
+    
     <button type="submit" class="btn btn-primary" id="add">작성</button>
     <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
 <a href="/listPage?page=1" type="button" class="btn btn-primary" id="getList">목록으로</a>
@@ -380,6 +387,7 @@ function spaceCheck(txt){
 
 
 </form>
+
 
 
  <script>
@@ -492,7 +500,7 @@ function check(){
 
 <script>
 $(function(){
-	$("#content").on("keyup", function(){
+	$("#content").on("input", function(){
 		const f = document.content01;
 		const inputLength = $(this).val().length;
 		const a = $(this).val();

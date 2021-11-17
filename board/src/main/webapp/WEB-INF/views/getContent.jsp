@@ -279,6 +279,14 @@ $(function(){
       <label for="content" class="form-label mt-4">내용</label>
       <textarea class="form-control" name="content" id="content" rows="3" style="margin-top: 0px; margin-bottom: 0px; height: 500px; width: 1200px;" readonly><c:out value="${board.content}"/></textarea>
     </div>
+    
+    <div class="form-group">
+       <c:set var="contextPath" value="${pageContext.servletContext.contextPath}" scope="application" />
+       <%-- <c:set var="uploadPath" value='C:\Users\HGR\git\Board\board\src\main\webapp\resources\file\' scope="application" /> --%>
+      <label for="file" class="form-label mt-4">첨부파일</label>
+      <a href="${contextPath}/${board.fileName}" download><c:out value="${board.fileName}"/></a>
+      <!--  <input type="text" name="file" class="form-control" id="file" value="<c:out value="${board.fileName}"/>" readonly>-->
+    </div>
     <input type="hidden" name="password01" id="password01" value="${board.password}"/><br />
     <input type="hidden" name="rno" id="rno" value="${reply.rno}"/>
     
@@ -592,7 +600,7 @@ $(function(){
 <script>
 
 $(function(){
-	$("#replyWriter").on("input", function(){
+	$("#replyWriter").on("keyup", function(){
 		const f = document.content01;
 		const inputLength = $(this).val().length;
 		const a = $(this).val();
@@ -607,7 +615,7 @@ $(function(){
 
 
 $(function(){
-	$("#replyPassword").on("input", function(){
+	$("#replyPassword").on("keyup", function(){
 		const f = document.content01;
 		const inputLength = $(this).val().length;
 		const a = $(this).val();
@@ -644,7 +652,7 @@ $(function(){
 
 
 $(function(){
-	$("#text").on("input", function(){
+	$("#text").on("keyup", function(){
 		const f = document.content01;
 		const inputLength = $(this).val().length;
 		const a = $(this).val();
@@ -653,7 +661,7 @@ $(function(){
 		if(inputLength > 300){
 			alert("내용은 300자까지 가능합니다");
 			f.text.focus();
-			//$(this).val(a.substring(0,500));
+			$(this).val(a.substring(0,300));
 			//$("#textLength").html("(500/500)");
 		}
 		

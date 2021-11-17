@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import com.test.dao.BoardDao;
+import com.test.dao.ReplyDao;
 import com.test.domain.Board;
 import com.test.domain.Criteria;
 import com.test.domain.SearchCriteria;
@@ -20,6 +21,8 @@ public class BoardServiceImpl implements BoardService{
 	
 	@Inject
 	private BoardDao boardDao;
+	
+	
 	
 	//글 작성
 	@Override

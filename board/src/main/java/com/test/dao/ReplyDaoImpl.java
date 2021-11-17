@@ -41,7 +41,20 @@ public class ReplyDaoImpl implements ReplyDao {
 		sqlsession.delete("replyMapper.deleteReply", rno);
 		
 	}
-	
+
+	//댓글 갯수 조회
+	@Override
+	public int replyCount() throws Exception {
+		return sqlsession.selectOne("replyMapper.replyCount");
+	}
+
+	//댓글 갯수 조회
+//	@Override
+//	public int countReply() throws Exception {
+//		System.out.println("어디가 문제일까");
+//		return sqlsession.selectOne("replyMapper.countReply");
+//	}
+//	
 	
 	
 

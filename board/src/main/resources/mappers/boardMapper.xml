@@ -16,6 +16,8 @@
 	<result property="indent" column="indent" jdbcType="INTEGER" />
 	<result property="deleteStatus" column="deletestatus" jdbcType="INTEGER" />
 	<result property="parentNo" column="parentNo" jdbcType="INTEGER" />
+	<result property="replyCount" column="replyCount" jdbcType="INTEGER" />
+	<result property="fileName" column="fileName" jdbcType="VARCHAR" />
 </resultMap>
  
  <!-- 게시판 글 목록 -->
@@ -35,13 +37,13 @@
 	 <!-- 게시판 글 작성 -->
 	 <insert id="addContent" parameterType="com.test.domain.Board" >
 	 	INSERT
-		INTO BOARD(NO, TITLE, WRITER, PASSWORD, CONTENT, writedate, group_no, group_order, indent)
-		VALUES (NO_SEQ.NEXTVAL, #{title}, #{writer}, #{password}, #{content}, SYSDATE, NO_SEQ.CURRVAL,0,0)
+		INTO BOARD(NO, TITLE, WRITER, PASSWORD, CONTENT, writedate, group_no, group_order, indent,fileName)
+		VALUES (NO_SEQ.NEXTVAL, #{title}, #{writer}, #{password}, #{content}, SYSDATE, NO_SEQ.CURRVAL,0,0, #{fileName})
 	 </insert>
 	 
 	 <!-- 게시판 글 상세보기 -->
 	 <select id="getContent" parameterType="com.test.domain.Board" resultMap="board">
-		SELECT no, title, writer, writedate, content, password, group_no, group_order, indent
+		SELECT no, title, writer, writedate, content, password, group_no, group_order, indent, fileName
 		FROM board
 		WHERE no=#{no}
 	 </select>
@@ -50,7 +52,10 @@
 	 <!-- 글 수정 -->
 	 <update id="updateContent" parameterType="com.test.domain.Board" >
 	    UPDATE board
- 		SET content=#{content}, title=#{title}, writer=#{writer}
+ 		SET content=#{content}, title=#{title}, writer=#{writer}, 
+ 		<if test = "fileName ! = null">
+ 		fileName=#{fileName}
+ 		</if>
 		WHERE no=#{no}
 	 </update>
 	 
@@ -89,9 +94,9 @@
 	 
 	 <!-- 검색 -->
 	 <select id="listSerach" resultType="com.test.domain.Board" parameterType="com.test.domain.SearchCriteria" >
-		SELECT no, title,writer, writeDate, group_no, group_order, indent, deletestatus, parentNo
-		FROM (SELECT no, title, writer, writedate, group_no, group_order, indent,deletestatus,parentNo,row_number() over(ORDER BY group_no DESC) rNum
-		FROM (SELECT no, title,writer, writeDate, group_no, group_order, indent, deletestatus, parentNo
+		SELECT no, title,writer, writeDate, group_no, group_order, indent, deletestatus, parentNo, fileName,(SELECT COUNT(*) FROM reply WHERE no=b.no) replyCount
+		FROM (SELECT no, title, writer, writedate, group_no, group_order, indent,deletestatus,parentNo,replyCount,fileName,row_number() over(ORDER BY group_no DESC) rNum
+		FROM (SELECT no, title,writer, writeDate, group_no, group_order, indent, deletestatus, parentNo,fileName,replyCount
 			  FROM board
 			  ORDER BY group_order ASC)
 		<include refid="search"></include>) b
@@ -142,11 +147,11 @@
 	 <!-- 답글 작성 -->
 	 <insert id="addContentReply" parameterType="com.test.domain.Board">
 		INSERT INTO
-		BOARD (no, title, writer, content, password, writedate, group_no, group_order, indent, deletestatus, parentNo)
+		BOARD (no, title, writer, content, password, writedate, group_no, group_order, indent, deletestatus, parentNo,fileName)
 		VALUES (NO_SEQ.NEXTVAL, #{title}, #{writer}, #{content}, #{password}, SYSDATE, #{groupNo}, 
 		#{groupOrder}+1, 
         (SELECT NVL(max(#{indent}),1)+1 FROM board WHERE group_no = #{groupNo} AND indent = #{indent}),
-        DEFAULT, NO_SEQ.CURRVAL)
+        DEFAULT, NO_SEQ.CURRVAL,#{fileName})
 	 </insert>
 	 
 	 <!-- 답글 작성시 groupOrder 증가 업뎃 -->
@@ -159,6 +164,13 @@
 	 ]]>
 	 
 	 </update>
+	 
+<!-- 	 <select id="replyCount" resultType="int">
+	 	SELECT COUNT(rno)
+	 	FROM reply
+	 	WHERE no = 331
+	 </select> -->
+	 
 	 
 	 <!-- 답글 그룹에 대한  갯수 -->
 	 <select id="groupNoCount" resultType="int">
