@@ -98,6 +98,8 @@ ALTER TABLE board ADD parentNo NUMBER;
 ALTER TABLE board ADD replyCount NUMBER DEFAULT 0;
 
 ALTER TABLE board ADD fileName VARCHAR2(90);
+
+ALTER TABLE board ADD reFileName VARCHAR2(90);
 <<<<<<<<<<컬럼 추가>>>>>>>>>>
 
 

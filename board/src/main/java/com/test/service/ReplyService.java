@@ -27,6 +27,9 @@ public interface ReplyService {
 	//댓글 갯수 조회
 //	public int countReply() throws Exception;
 	
+	//댓글 비번 체크
+	public String replyPwd(int rno) throws Exception;
+	
 
 	
 

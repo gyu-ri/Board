@@ -48,6 +48,12 @@ public class ReplyDaoImpl implements ReplyDao {
 		return sqlsession.selectOne("replyMapper.replyCount");
 	}
 
+	//댓글 비번 체크
+	@Override
+	public String replyPwd(int rno) throws Exception {
+		return sqlsession.selectOne("replyMapper.replyPwd", rno);
+	}
+
 	//댓글 갯수 조회
 //	@Override
 //	public int countReply() throws Exception {

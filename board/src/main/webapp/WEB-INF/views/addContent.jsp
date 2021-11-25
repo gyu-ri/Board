@@ -507,10 +507,13 @@ $(function(){
 		$("#textLength").html("("+ a.length +"/500)");
 		
 		if(inputLength > 500){
-			alert("내용은 500자까지 가능합니다");
+			//alert("내용은 500자까지 가능합니다");
+			setTimeout(function(){
+			alert("내용은 500자까지 가능합니다")},100);
+			$(this).val(a.substring(0,500)),1000
 			f.content.focus();
-			$(this).val(a.substring(0,500));
 			$("#textLength").html("(500/500)");
+			
 		}
 		
 	})
@@ -518,14 +521,17 @@ $(function(){
 
 
 $(function(){
-	$("#title").on("keyup", function(){
+	$("#title").on("input", function(){
 		const f = document.content01;
 		const inputLength = $(this).val().length;
 		const a = $(this).val();
 		if(inputLength > 100){
+			setTimeout(function(){
 			alert("제목은 100자까지 가능합니다");
+			},100);
 			f.title.focus();
 			$(this).val(a.substring(0,100));
+
 		}
 		
 	})
@@ -533,7 +539,7 @@ $(function(){
 
 
 $(function(){
-	$("#password").on("keyup", function(){
+	$("#password").on("input", function(){
 		const f = document.content01;
 		const inputLength = $(this).val().length;
 		const a = $(this).val();
@@ -542,7 +548,9 @@ $(function(){
 		const pattern04 = /[가-힣ㄱ-ㅎㅏ-ㅣ]/gm;
 		
 		if(inputLength > 16){
+			setTimeout(function(){
 			alert("비밀번호는 16자까지 가능합니다");
+			},100);
 			f.password.focus();
 			$(this).val(a.substring(0,16));
 		}
@@ -574,18 +582,25 @@ $(function(){
 
 
 $(function(){
-	$("#writer").on("keyup", function(){
+	$("#writer").on("input", function(){
 		const f = document.content01;
 		const inputLength = $(this).val().length;
 		const a = $(this).val();
 		if(inputLength > 5){
+			setTimeout(function(){
 			alert("작성자는 5자까지 가능합니다");
+			},100);
 			f.writer.focus();
 			$(this).val(a.substring(0,5));
 		}
 		
 	})
 });
+
+
+
+
+
 
 
 

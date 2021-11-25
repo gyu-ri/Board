@@ -21,6 +21,7 @@ public class Board {
 	private int replyCount;
 	
 	private String fileName;
+	private String reFileName;
 	private String uploadPath;
 	
 	public int getNo() {
@@ -65,6 +66,12 @@ public class Board {
 	
 	
 	
+	public String getReFileName() {
+		return reFileName;
+	}
+	public void setReFileName(String reFileName) {
+		this.reFileName = reFileName;
+	}
 	public String getUploadPath() {
 		return uploadPath;
 	}
@@ -124,10 +131,9 @@ public class Board {
 		return "Board [no=" + no + ", title=" + title + ", writer=" + writer + ", password=" + password + ", content="
 				+ content + ", writeDate=" + writeDate + ", groupNo=" + groupNo + ", groupOrder=" + groupOrder
 				+ ", indent=" + indent + ", groupNoCount=" + groupNoCount + ", deleteStatus=" + deleteStatus
-				+ ", parentNo=" + parentNo + ", replyCount=" + replyCount + ", fileName=" + fileName + ", uploadPath="
-				+ uploadPath + "]";
+				+ ", parentNo=" + parentNo + ", replyCount=" + replyCount + ", fileName=" + fileName + ", reFileName="
+				+ reFileName + ", uploadPath=" + uploadPath + "]";
 	}
-	
 	
 	
 }
