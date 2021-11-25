@@ -51,4 +51,10 @@
 		WHERE no= #{no}
 	</select>
 
+<!-- 댓글 비밀번호 체크 -->
+	<select id = "replyPwd" parameterType="com.test.domain.Reply" resultMap = "reply">
+		SELECT password
+		FROM reply
+		WHERE rno = #{rno}
+	</select>
 </mapper>

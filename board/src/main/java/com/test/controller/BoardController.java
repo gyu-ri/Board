@@ -142,8 +142,11 @@ public class BoardController {
 		
 		String originalFileName = file.getOriginalFilename();
 		String safeFile = uploadPath + System.currentTimeMillis() + originalFileName;
+		String reFileName = System.currentTimeMillis() + originalFileName;
 		board.setFileName(originalFileName);
+		board.setReFileName(reFileName);
 		System.out.println("**************"+board.getFileName());
+		System.out.println("**************"+board.getReFileName());
 		
 		try {
 			file.transferTo(new File(safeFile));
@@ -199,7 +202,6 @@ public class BoardController {
 			e.printStackTrace();
 		}
 		
-		
 		boardService.addContentReply(board);
 		
 
@@ -234,10 +236,10 @@ public class BoardController {
 		System.out.println("getContent Controller 확인"+board);
 		System.out.println("&&&&&&&&&&&&&&&&&"+board.getFileName());
 		
-		List<Reply> replyList = replyService.getReply(no);
-		model.addAttribute("replyList", replyList);
-		System.out.println("getContent에서 replyList 확인 :: "+replyList);
-		
+//		List<Reply> replyList = replyService.getReply(no);
+//		model.addAttribute("replyList", replyList);
+//		System.out.println("getContent에서 replyList 확인 :: "+replyList);
+//		
 		return "getContent";
 		
 	}
@@ -249,6 +251,7 @@ public class BoardController {
 		Board board=boardService.getContent(no);
 		model.addAttribute("board", board);
 		System.out.println("updateContent controller GET 시작"+no);
+		System.out.println("((((((((((((((((((((((("+board);
 		
 		return "updateContent";
 	}
@@ -282,7 +285,9 @@ public class BoardController {
 		
 		boardService.updateContent(board);
 		model.addAttribute("board", board);
+		model.addAttribute("originalFileName", originalFileName);
 		System.out.println("updateContent Controller  POST 확인"+board);
+		System.out.println("updateContent Controller  POST 확인"+board.getFileName());
 		
 		return "redirect:/getContent?no="+board.getNo();
 		
@@ -366,18 +371,26 @@ public class BoardController {
 		}
 	
 	//댓글 가져오기
-//	@ResponseBody
-//	@RequestMapping(value="/getReply", method=RequestMethod.GET)
-//	public List<Reply> getReply(@RequestParam("no") int no, Model model) throws Exception{
+	@ResponseBody
+	@RequestMapping(value="/getReply", method=RequestMethod.GET)
+	public List<Reply> getReply(@RequestParam("no") int no, Model model) throws Exception{
+		
+		System.out.println("getReply ajax 실행 되나요111111?");
+		List<Reply> replyList = replyService.getReply(no);
+		System.out.println("getReply ajax 실행 되나요2222?");
+		
+		
+		model.addAttribute("replyList", replyList);
+		
+		
+//		String replyPwd = replyService.replyPwd(89);
 //		
-//		System.out.println("getReply ajax 실행 되나요111111?");
-//		List<Reply> replyList = replyService.getReply(no);
-//		System.out.println("getReply ajax 실행 되나요2222?");
+//		model.addAttribute(replyPwd);
 //		
-//		model.addAttribute("replyList", replyList);
-//		
-//		return replyList;
-//	}
+//		System.out.println("zzzzzzzzzzzzzzzzzzzzzzzzzzzzz"+replyPwd);
+		
+		return replyList;
+	}
 	
 	
 	

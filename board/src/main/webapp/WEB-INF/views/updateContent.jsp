@@ -36,6 +36,58 @@ transform:translate(-50%,-50%);
 
 
 
+
+
+<!-- <script>
+	function contentChk(content){
+	document.getElementById('result').value=
+	document.getElementById('#textLength').value.length;
+	}
+
+</script>  -->
+
+</head>
+<body>
+		<form action="updateContent" method="post" name="updateContent01" onsubmit="return check()" enctype="multipart/form-data">
+  <fieldset>
+    <legend>글수정</legend>
+    <div class="form-group">
+      <label for="title" class="form-label mt-4">제목</label>
+      <input type="text" name="title" class="form-control" id="title" value="<c:out value="${board.title}"/>" size="200" >
+    </div>
+     <div class="form-group">
+      <label for="writer" class="form-label mt-4">작성자</label>
+      <input type="text" name="writer" class="form-control" id="writer" value="${board.writer}" >
+    </div>
+    <div class="form-group">
+      <label for="writeDate" class="form-label mt-4">작성일</label>
+      <fmt:formatDate value="${board.writeDate}" pattern="yyyy-MM-dd" />
+    </div>
+
+    <div class="form-group">
+      <label for="content" class="form-label mt-4">내용</label>
+      <span id="textLength">(0/500)</span>
+      <textarea class="form-control" name="content"  id="content" rows="3" style="margin-top: 0px; margin-bottom: 0px; height: 500px; width: 1200px;"><c:out value="${board.content}"/></textarea>
+    </div>
+    
+     <div class="form-group">
+      <label for="file" class="form-label mt-4">파일 첨부</label>
+       <span class="fileName"><c:out value="${board.fileName}"/>&nbsp;
+       <c:if test="${board.fileName != null}">
+       <span class="btn-delete" style="cursor:pointer;">x</span></span>
+       </c:if>
+       <input type="file" name="file" class="form-control" id="file">
+     <!--   <input type="button" value="변경" id="changeFile">
+      <input type="file" name="file" class="form-control" id="fileUpload" > -->
+    </div> 
+    
+    <input type="hidden" name="no" id="no" value="${board.no}"/><br />
+    <input type="submit" id="updateContent" class="btn btn-primary" value="수정완료">
+  </fieldset>
+</form>
+
+
+
 <script>
 function check(){
 	const f=document.updateContent01;
@@ -375,58 +427,19 @@ $(function(){
 	})
 });
 
+</script>
 
-
-
-
-
+<script>
+$(function(){
+	$(".btn-delete").on("click", function(){
+		console.log("delete start!!")
+		$(".fileName").hide();
+		
+	})
+	
+})
 
 </script>
 
-
-<!-- <script>
-	function contentChk(content){
-	document.getElementById('result').value=
-	document.getElementById('#textLength').value.length;
-	}
-
-</script>  -->
-
-</head>
-<body>
-		<form action="updateContent" method="post" name="updateContent01" onsubmit="return check()" enctype="multipart/form-data">
-  <fieldset>
-    <legend>글수정</legend>
-    <div class="form-group">
-      <label for="title" class="form-label mt-4">제목</label>
-      <input type="text" name="title" class="form-control" id="title" value="<c:out value="${board.title}"/>" size="200" >
-    </div>
-     <div class="form-group">
-      <label for="writer" class="form-label mt-4">작성자</label>
-      <input type="text" name="writer" class="form-control" id="writer" value="${board.writer}" >
-    </div>
-    <div class="form-group">
-      <label for="writeDate" class="form-label mt-4">작성일</label>
-      <fmt:formatDate value="${board.writeDate}" pattern="yyyy-MM-dd" />
-    </div>
-
-    <div class="form-group">
-      <label for="content" class="form-label mt-4">내용</label>
-      <span id="textLength">(0/500)</span>
-      <textarea class="form-control" name="content"  id="content" rows="3" style="margin-top: 0px; margin-bottom: 0px; height: 500px; width: 1200px;"><c:out value="${board.content}"/></textarea>
-    </div>
-    
-     <div class="form-group">
-      <label for="file" class="form-label mt-4">파일 첨부</label>
-       <a href="${contextPath}/${board.fileName}" download><c:out value="${board.fileName}"/></a>
-       <input type="file" name="file" class="form-control" id="file" >
-     <!--   <input type="button" value="변경" id="changeFile">
-      <input type="file" name="file" class="form-control" id="fileUpload" > -->
-    </div> 
-    
-    <input type="hidden" name="no" id="no" value="${board.no}"/><br />
-    <input type="submit" id="updateContent" class="btn btn-primary" value="수정완료">
-  </fieldset>
-</form>
 </body>
 </html>

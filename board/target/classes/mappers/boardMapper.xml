@@ -18,6 +18,7 @@
 	<result property="parentNo" column="parentNo" jdbcType="INTEGER" />
 	<result property="replyCount" column="replyCount" jdbcType="INTEGER" />
 	<result property="fileName" column="fileName" jdbcType="VARCHAR" />
+	<result property="reFileName" column="reFileName" jdbcType="VARCHAR" />
 </resultMap>
  
  <!-- 게시판 글 목록 -->
@@ -37,13 +38,13 @@
 	 <!-- 게시판 글 작성 -->
 	 <insert id="addContent" parameterType="com.test.domain.Board" >
 	 	INSERT
-		INTO BOARD(NO, TITLE, WRITER, PASSWORD, CONTENT, writedate, group_no, group_order, indent,fileName)
-		VALUES (NO_SEQ.NEXTVAL, #{title}, #{writer}, #{password}, #{content}, SYSDATE, NO_SEQ.CURRVAL,0,0, #{fileName})
+		INTO BOARD(NO, TITLE, WRITER, PASSWORD, CONTENT, writedate, group_no, group_order, indent,fileName,reFileName)
+		VALUES (NO_SEQ.NEXTVAL, #{title}, #{writer}, #{password}, #{content}, SYSDATE, NO_SEQ.CURRVAL,0,0, #{fileName},#{reFileName})
 	 </insert>
 	 
 	 <!-- 게시판 글 상세보기 -->
 	 <select id="getContent" parameterType="com.test.domain.Board" resultMap="board">
-		SELECT no, title, writer, writedate, content, password, group_no, group_order, indent, fileName
+		SELECT no, title, writer, writedate, content, password, group_no, group_order, indent, fileName, reFileName
 		FROM board
 		WHERE no=#{no}
 	 </select>
@@ -53,7 +54,7 @@
 	 <update id="updateContent" parameterType="com.test.domain.Board" >
 	    UPDATE board
  		SET content=#{content}, title=#{title}, writer=#{writer}, 
- 		<if test = "fileName ! = null">
+ 		<if test = "fileName != null" >
  		fileName=#{fileName}
  		</if>
 		WHERE no=#{no}

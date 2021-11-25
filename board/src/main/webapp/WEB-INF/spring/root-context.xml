@@ -46,6 +46,7 @@
 	<!-- 파일업로드 디렉토리 설정 -->
  	<bean id="uploadPath" class="java.lang.String">
 		<constructor-arg value="C:\Users\HGR\git\Board\board\src\main\webapp\resources\file\" />
+		<!-- <constructor-arg value="..\..\resources\file\" /> -->
 	</bean>
   
   
